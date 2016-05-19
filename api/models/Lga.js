@@ -7,8 +7,23 @@
 
 module.exports = {
 
-  attributes: {
-
-  }
+    attributes: {
+        name : {
+            type: 'string'
+        },
+        state: {
+            model: 'state'
+        },
+        wards: {
+            collection: 'ward',
+            via: 'lga'
+        },
+        location: {
+            type: 'json'
+        },
+          isDeleted: {
+            type : 'boolean',
+            defaultsTo : false
+        }
+    }
 };
-

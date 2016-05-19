@@ -8,6 +8,14 @@
 module.exports = {
 
   attributes: {
+    mdas : {
+        collection : 'mda',
+        via : 'ministry'
+    },
+      isDeleted: {
+            type : 'boolean',
+            defaultsTo : false
+        }
 
   }
 };

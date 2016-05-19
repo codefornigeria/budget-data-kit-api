@@ -11,14 +11,21 @@
  */
 
 module.exports = {
-
-  /***************************************************************************
-   * Set the default database connection for models in the development       *
-   * environment (see config/connections.js and config/models.js )           *
-   ***************************************************************************/
-
-  // models: {
-  //   connection: 'someMongodbServer'
-  // }
-
+    connections: {
+        herokuMongoDb: {
+            adapter: 'sails-mongo',
+            url: process.env.MONGODB_URI
+        },
+             mongoTestDb: {
+                adapter: 'sails-mongo',
+                host: 'localhost',
+                port: 27017,
+                user: '',
+                password: '',
+                database: 'datakit'
+            }
+    },
+    models: {
+        connection: 'mongoTestDb',
+    }
 };

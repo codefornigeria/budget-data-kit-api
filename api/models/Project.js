@@ -40,7 +40,11 @@ module.exports = {
     },
     endDate : {
         type : 'date'
-    }
+    },
+      isDeleted: {
+            type : 'boolean',
+            defaultsTo : false
+        }
   }
 };
 

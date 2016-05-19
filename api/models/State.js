@@ -8,7 +8,32 @@
 module.exports = {
 
   attributes: {
-
+    location : {
+        type : 'json'
+    },
+    country : {
+        model: 'country'
+    },
+    consistuencys : {
+        collection :'constituency',
+        via  : 'state'
+    },
+    districts : {
+        collection :'district',
+        via : 'state'
+    },
+    lgas: {
+        collection :'lga',
+        via : 'state'
+    },
+    wards  : {
+        collection : 'ward',
+        via : 'state'
+    },
+      isDeleted: {
+            type : 'boolean',
+            defaultsTo : false
+        }
   }
 };
 

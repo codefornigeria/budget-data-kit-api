@@ -8,7 +8,19 @@
 module.exports = {
 
   attributes: {
-
+    lga : {
+        model : 'lga'
+    },
+    state : {
+        model :'state'
+    },
+    location : {
+        type : 'json'
+    },
+      isDeleted: {
+            type : 'boolean',
+            defaultsTo : false
+        }
   }
 };
 

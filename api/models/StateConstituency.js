@@ -8,7 +8,10 @@
 module.exports = {
 
   attributes: {
-
+  isDeleted: {
+            type : 'boolean',
+            defaultsTo : false
+        }
   }
 };
 

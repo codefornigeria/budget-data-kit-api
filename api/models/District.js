@@ -7,8 +7,19 @@
 
 module.exports = {
 
-  attributes: {
-
-  }
+    attributes: {
+        name: {
+            type: 'string'
+        },
+        representative: {
+            type: 'string'
+        },
+        state: {
+            model: 'state'
+        },
+          isDeleted: {
+            type : 'boolean',
+            defaultsTo : false
+        }
+    }
 };
-

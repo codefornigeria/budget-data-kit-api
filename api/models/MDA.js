@@ -8,6 +8,16 @@
 module.exports = {
 
   attributes: {
+    name : {
+        type : 'string'
+    },
+    ministry : {
+        model : 'ministry'
+    },
+      isDeleted: {
+            type : 'boolean',
+            defaultsTo : false
+        }
 
   }
 };
