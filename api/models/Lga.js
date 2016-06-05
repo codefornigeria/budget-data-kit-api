@@ -5,25 +5,43 @@
  * @docs        :: http://sailsjs.org/documentation/concepts/models-and-orm/models
  */
 
-module.exports = {
 
+var slug = require('slug');
+module.exports = {
     attributes: {
-        name : {
+        name: {
             type: 'string'
         },
         state: {
             model: 'state'
         },
-        wards: {
-            collection: 'ward',
-            via: 'lga'
+        lgaCode : {
+            type : 'string'
+        },
+        amapCode : {
+            type : 'string'
         },
         location: {
             type: 'json'
         },
-          isDeleted: {
-            type : 'boolean',
-            defaultsTo : false
+        isDeleted: {
+            type: 'boolean',
+            defaultsTo: false
         }
+    },
+    beforeValidate: function(values, cb) {
+        State.findOne({ stateCode: values.stateCode }).exec(function stateCB(err, state) {
+            if (!state) {
+                values.state = null;
+                cb()
+            } else {
+                values.state = state.id;
+                cb();
+            }
+        });
+    },
+    beforeCreate: function(values, cb) {
+        values.slug = slug(values.name, { lower: true });
+        cb();
     }
 };

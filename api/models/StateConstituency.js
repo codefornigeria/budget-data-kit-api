@@ -8,6 +8,9 @@
 module.exports = {
 
   attributes: {
+      location: {
+            type: 'json'
+        },
   isDeleted: {
             type : 'boolean',
             defaultsTo : false

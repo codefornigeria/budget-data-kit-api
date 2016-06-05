@@ -11,15 +11,29 @@ module.exports = {
         name: {
             type: 'string'
         },
+        slug : {
+            type :'string',
+            unique:true
+        },
         representative: {
-            type: 'string'
+            model: 'person'
         },
         state: {
             model: 'state'
+        },
+          location: {
+            type: 'json'
         },
         isDeleted: {
             type : 'boolean',
             defaultsTo : false
         }
+    }, 
+    beforeCreate: function(values, cb) {
+        values.name = values.name.toLowerCase();
+         values.slug = slug(values.name, {lower: true});
+      
+        cb();
     }
+
 };

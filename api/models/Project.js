@@ -29,11 +29,21 @@ module.exports = {
     stateConstituency : {
         model : 'stateconstituency'
     },
+    state : {
+        model :'state'
+    },
     lga : {
         model : 'lga'
     },
     ward : {
         model :'ward'
+    },
+    person : {
+        model : 'person'
+    },
+    projectState : {
+        type : 'string'
+
     },
     startDate : {
         type : 'date'
