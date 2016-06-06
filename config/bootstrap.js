@@ -425,7 +425,7 @@ module.exports.bootstrap = function(cb) {
                 loadPersons(newSetup);
                 // loadConsistuency(newSetup);
                 // loadStateConstituency(newSetup);
-                // loadProjects(newSetup);
+                 loadProjects(newSetup);
 
             });
         }
