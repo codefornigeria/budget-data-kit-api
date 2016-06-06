@@ -411,10 +411,10 @@ module.exports.bootstrap = function(cb) {
             //     // console.log('template is false')
             //     loadMdas(setup);
             // }
-            // if (setup[0].projectLoaded == false) {
-            //     // console.log('template is false')
-            //     loadProjects(setup);
-            // }
+            if (setup[0].projectLoaded == false) {
+                // console.log('template is false')
+                loadProjects(setup);
+            }
         } else {
             Setup.create({}).then(function(newSetup) {
                 loadCountry(newSetup);
@@ -425,7 +425,7 @@ module.exports.bootstrap = function(cb) {
                 loadPersons(newSetup);
                 // loadConsistuency(newSetup);
                 // loadStateConstituency(newSetup);
-            //     loadProjects(newSetup);
+                loadProjects(newSetup);
 
             });
         }
