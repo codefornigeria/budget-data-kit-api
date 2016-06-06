@@ -391,10 +391,10 @@ module.exports.bootstrap = function(cb) {
                 // console.log('template is false')
                 loadDistricts(setup);
             }
-            // if (setup[0].personLoaded == false) {
-            //     // console.log('template is false')
-            //     loadPersons(setup);
-            // }
+            if (setup[0].personLoaded == false) {
+                // console.log('template is false')
+                loadPersons(setup);
+            }
             //if (setup[0].consistuencyLoaded == false) {
             //     // console.log('template is false')
             //     loadConsistuencys(setup);
@@ -422,7 +422,7 @@ module.exports.bootstrap = function(cb) {
                 loadLgas(newSetup);
                 // loadWard(newSetup);
                 loadDistricts(newSetup);
-               // loadPersons(newSetup);
+                loadPersons(newSetup);
                 // loadConsistuency(newSetup);
                 // loadStateConstituency(newSetup);
             //     loadProjects(newSetup);
