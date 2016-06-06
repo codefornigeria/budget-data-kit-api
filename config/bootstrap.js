@@ -419,13 +419,13 @@ module.exports.bootstrap = function(cb) {
             Setup.create({}).then(function(newSetup) {
                 loadCountry(newSetup);
                 loadStates(newSetup);
-                loadLgas(newSetup);
+              //  loadLgas(newSetup);
                 // loadWard(newSetup);
-                loadDistricts(newSetup);
-                loadPersons(newSetup);
+                //loadDistricts(newSetup);
+               // loadPersons(newSetup);
                 // loadConsistuency(newSetup);
                 // loadStateConstituency(newSetup);
-                 loadProjects(newSetup);
+            //     loadProjects(newSetup);
 
             });
         }
