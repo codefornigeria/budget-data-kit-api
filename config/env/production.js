@@ -21,9 +21,9 @@ module.exports = {
         connection: 'herokuMongoDb',
     },
     settings: {
-        baseUrlApi: process.env.BASE_URL_API || "http://api.verifyng.dev",
-        baseUrlUi: process.env.BASE_URL_UI || "http://app.verifyng.dev",
-        baseUrl: process.env.BASE_URL || "verifyng.dev",
+        baseUrlApi: process.env.BASE_URL_API || "http://api.datakit.dev",
+        baseUrlUi: process.env.BASE_URL_UI || "http://app.datakit.dev",
+        baseUrl: process.env.BASE_URL || "datakit.dev",
 
         /*
          * JWT settings
