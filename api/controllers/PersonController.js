@@ -1,7 +1,7 @@
 /**
- * ProjectController
+ * PersonController
  *
- * @description :: Server-side logic for managing Projects
+ * @description :: Server-side logic for managing People
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
@@ -329,14 +329,14 @@ module.exports = {
         }
 
 
-        Project.count(criteria).then(function(count) {
-            var findQuery = Project.find(criteria).populateAll()
+        Person.count(criteria).then(function(count) {
+            var findQuery = Person.find(criteria).populateAll()
                 .sort('createdAt DESC')
                 .paginate(pagination);
             return [count, findQuery]
 
-        }).spread(function(count, projects) {
-            if (projects.length) {
+        }).spread(function(count, persons) {
+            if (persons.length) {
                 var numberOfPages = Math.ceil(count / pagination.limit)
                 var nextPage = parseInt(pagination.page) + 1;
                 var meta = {
@@ -347,9 +347,9 @@ module.exports = {
                     pageCount: numberOfPages,
                     total: count
                 }
-                return ResponseService.json(200, res, " Projects retrieved successfully", projects, meta);
+                return ResponseService.json(200, res, " Persons retrieved successfully", persons, meta);
             } else {
-                return ResponseService.json(200, res,"Projects not found", [])
+                return ResponseService.json(200, res,"Persons not found", [])
             }
         }).catch(function(err) {
             return ValidationService.jsonResolveError(err, res);
@@ -516,11 +516,11 @@ module.exports = {
             id: req.params.id
         }
 
-        Project.findOne(criteria).then(function(project) {
-                if (!project) {
-                    return ResponseService.json(404, res, "Project not found");
+        Person.findOne(criteria).then(function(person) {
+                if (!person) {
+                    return ResponseService.json(404, res, "Person not found");
                 }
-                return ResponseService.json(200, res, "Project retrieved successfully", project);
+                return ResponseService.json(200, res, "Person retrieved successfully", person);
             })
             .catch(function(err) {
                 return ValidationService.jsonResolveError(err, res);
@@ -661,3 +661,4 @@ module.exports = {
     }
 
 };
+
