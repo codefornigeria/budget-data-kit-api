@@ -49,6 +49,22 @@ module.exports.routes = {
   'GET /search' : {
     controller: 'SearchController',
     action:'search'
+  },
+  'GET /person': {
+    controller:'PersonController',
+    action:'list'
+  },
+  'GET /person/:id' :{
+    controller : 'PersonController',
+    action :'view'
+  },
+  'GET /project': {
+    controller : 'ProjectController',
+    action:'list'
+  },
+  'GET /project/:id':{
+    controller : 'ProjectController',
+    action:'view'
   }
 
 };
