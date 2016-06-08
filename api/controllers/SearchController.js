@@ -22,70 +22,70 @@ module.exports = {
             // find person then project then persons
 
         async.waterfall([
-            function(callback) {
-                var searchResult = {}
-                setTimeout(function() {
-                    sails.controllers.search.searchPerson(query, function(err, person) {
-                        if (err) {
-                            callback(err);
-                        }
-                        if (person) {
-                            searchResult.person = person;
-                        } else {
-                            person = [];
-                        }
-                        searchResult.person = person
-                        callback(null, searchResult)
-
-                    })
-                }, 100)
-            },
-
-            function(searchresult, callback) {
-                var searchResult = searchresult;
-                searchResult.project = [];
-                setTimeout(function() {
-                    sails.controllers.search.searchProject(query, function(err, projects) {
-                        if (err) {
-                            callback(err);
-                        }
-
-
-                         projects.forEach(function(project){
-                            var foundPerson = _.find(searchResult.person ,{id : project.person.id})
-                            if(!foundPerson){
-                                project.person.dataType = 'person';
-                                searchResult.person.push(project.person);
+                function(callback) {
+                    var searchResult = {}
+                    setTimeout(function() {
+                        sails.controllers.search.searchPerson(query, function(err, person) {
+                            if (err) {
+                                callback(err);
                             }
-                         })
-                        // _.find(searchResult.person , function())
-                        searchResult.project = projects
-                        callback(null, searchResult)
+                            if (person) {
+                                searchResult.person = person;
+                            } else {
+                                person = [];
+                            }
+                            searchResult.person = person
+                            callback(null, searchResult)
 
-                    })
-                }, 100)
-            },
-            function(searchresult, callback){
-                var searchResult = searchresult;
-                if(searchResult.person.length && !searchResult.project.length){
-                    console.log('there is person but no project')
+                        })
+                    }, 100)
+                },
+
+                function(searchresult, callback) {
+                    var searchResult = searchresult;
+                    searchResult.project = [];
+                    setTimeout(function() {
+                        sails.controllers.search.searchProject(query, function(err, projects) {
+                            if (err) {
+                                callback(err);
+                            }
+
+
+                            projects.forEach(function(project) {
+                                    var foundPerson = _.find(searchResult.person, { id: project.person.id })
+                                    if (!foundPerson) {
+                                        project.person.dataType = 'person';
+                                        searchResult.person.push(project.person);
+                                    }
+                                })
+                                // _.find(searchResult.person , function())
+                            searchResult.project = projects
+                            callback(null, searchResult)
+
+                        })
+                    }, 100)
+                },
+                function(searchresult, callback) {
+                    var searchResult = searchresult;
+                    if (searchResult.person.length && !searchResult.project.length) {
+                        console.log('there is person but no project')
+                    }
+                    callback(null, searchResult);
                 }
-                callback(null, searchResult);
-            }
-        ], function(err, results) {
-            if (err) {
-                return ResponseService.json(400, res, "Error Retrieving search results")
-            }
-            return ResponseService.json(200, res, " Search Results Retrieved Successfully", results);
-        })
-        // async.parallel({
-        //     person: function(callback) {
-        //         setTimeout(function() {
-        //             sails.controllers.search.searchPerson(query, function(err, result) {
-        //                 if (err) {
-        //                     callback(err);
-        //                 }
-        //                 callback(null, result)
+            ], function(err, results) {
+                if (err) {
+                    return ResponseService.json(400, res, "Error Retrieving search results")
+                }
+                return ResponseService.json(200, res, " Search Results Retrieved Successfully", results);
+            })
+            // async.parallel({
+            //     person: function(callback) {
+            //         setTimeout(function() {
+            //             sails.controllers.search.searchPerson(query, function(err, result) {
+            //                 if (err) {
+            //                     callback(err);
+            //                 }
+            //                 callback(null, result)
 
         //             })
         //         }, 100)
@@ -134,25 +134,25 @@ module.exports = {
                 })
         })
     },
-    searchProjectByPerson: function(query ,cb){
-            var searchResult = [];
-    
-        Project.native(function(err, collection){
-            if(err){
+    searchProjectByPerson: function(query, cb) {
+        var searchResult = [];
+
+        Project.native(function(err, collection) {
+            if (err) {
                 console.log(err)
             }
-            collection.find({personId : $in:query}).toArray(function(err,project){
-                if(err){
+            collection.find({ personId: {$in: query} }).toArray(function(err, project) {
+                if (err) {
                     console.log(err)
                 }
-                project.forEach(function(project){
-                    project.dataType ='person';
+                project.forEach(function(project) {
+                    project.dataType = 'person';
                     searchResult.pusch(project)
                 })
-                cb(null,searchResult)
+                cb(null, searchResult)
             })
         })
-    }
+    },
     searchProject: function(query, cb) {
         var searchResult = [];
         Project.native(function(err, collection) {
