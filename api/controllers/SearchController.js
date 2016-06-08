@@ -52,7 +52,7 @@ module.exports = {
 
 
                             projects.forEach(function(project) {
-                                    var foundPerson = _.find(searchResult.person, { id: project.person.id })
+                                    var foundPerson = _.find(searchResult.person, { _id: project.person.id })
                                     if (!foundPerson) {
                                         project.person.dataType = 'person';
                                         searchResult.person.push(project.person);
@@ -67,6 +67,7 @@ module.exports = {
                 },
                 function(searchresult, callback) {
                     var searchResult = searchresult;
+
                     if (searchResult.person.length && !searchResult.project.length) {
                         console.log('there is person but no project')
                     }
@@ -74,8 +75,18 @@ module.exports = {
                 }
             ], function(err, results) {
                 if (err) {
+                  
                     return ResponseService.json(400, res, "Error Retrieving search results")
                 }
+                  var uniqResult ={
+
+                    }
+                    // uniqResult.person = _.uniqBy(results.person , function(person){
+                    //     return person._id
+                    // })
+                    // uniqResult.project = _uniqBy(results.project,function(project){
+                    //     return project._id
+                    // })
                 return ResponseService.json(200, res, " Search Results Retrieved Successfully", results);
             })
             // async.parallel({
