@@ -78,16 +78,17 @@ module.exports = {
                   
                     return ResponseService.json(400, res, "Error Retrieving search results")
                 }
+                console.log(results)
                   var uniqResult ={
 
                     }
-                    // uniqResult.person = _.uniqBy(results.person , function(person){
-                    //     return person._id
-                    // })
-                    // uniqResult.project = _uniqBy(results.project,function(project){
-                    //     return project._id
-                    // })
-                return ResponseService.json(200, res, " Search Results Retrieved Successfully", results);
+                    uniqResult.person = _.uniq(results.person , function(person){
+                        return person._id
+                    })
+                    uniqResult.project = _.uniq(results.project,function(project){
+                        return project._id
+                    })
+                return ResponseService.json(200, res, " Search Results Retrieved Successfully", uniqResult);
             })
             // async.parallel({
             //     person: function(callback) {
