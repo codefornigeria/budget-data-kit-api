@@ -11,35 +11,62 @@ module.exports = {
     description : {
         type : 'string'
     },
-    agency : {
+    agencyId : {
         model : 'mda'
     },
-    ministry : {
+    agency : {
+        type :'json'
+    },
+    ministryId : {
         model : 'ministry'
+    },
+    ministry : {
+        type:'json'
     },
     cost : {
         type : 'string'
     },
-    district : {
+    districtId : {
         model : 'district'
     },
-    consistuency : {
+    district : {
+        type:'json'
+    },
+    consistuencyId : {
         model :'constituency'
     },
-    stateConstituency : {
+    constituency : {
+        type:'json'
+    },
+    stateConstituencyId : {
         model : 'stateconstituency'
     },
-    state : {
+    stateConstituency : {
+        type :'json'
+    },
+    stateId : {
         model :'state'
     },
-    lga : {
+    state : {
+        type :'json'
+    },
+    lgaId : {
         model : 'lga'
     },
-    ward : {
+    lga : {
+        type :'json'
+    },
+    wardId : {
         model :'ward'
     },
-    person : {
+    ward: {
+        type :'json'
+    },
+    personId : {
         model : 'person'
+    },
+    person:{
+        type :'json'
     },
     projectState : {
         type : 'string'
