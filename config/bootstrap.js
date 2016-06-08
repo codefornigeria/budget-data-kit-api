@@ -273,14 +273,16 @@ module.exports.bootstrap = function(cb) {
                     console.log('error retrieving state')
                 }
                 if (state) {
-                    data.state = state.id
+                    data.stateId = state.id
+                    data.state = state
                 }
                 District.findOne({ slug: slug(senator.StateDistrict) }).exec(function cb(err, district) {
                     if (err) {
                         console.log('error with district')
                     }
                     if (district) {
-                        data.district = district.id
+                        data.districtId = district.id
+                        data.district = district
                     }
                     data.name = senator.Name;
                     data.party = senator.Party;
@@ -331,13 +333,16 @@ module.exports.bootstrap = function(cb) {
 
                 }
                 if (district) {
-                    data.district = district.id
-                    data.state = district.state.id
-                    Person.findOne({ district: district.id }).exec(function cb(err, person) {
+                    data.districtId = district.id
+                    data.district = district
+                    data.stateId = district.state.id
+                    data.state = district.state
+                    Person.findOne({ districtId: district.id }).exec(function cb(err, person) {
                         if (err) {
                             console.log('person not found');
                         }
-                        data.person = person.id
+                        data.personId = person.id
+                        data.person  = person
                         console.log(data)
                         Project.create(data).exec(function cb(err, project) {
                             if (err) {
