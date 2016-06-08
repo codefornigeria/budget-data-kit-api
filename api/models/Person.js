@@ -23,14 +23,23 @@ var slug = require('slug');
         phone: {
             type: 'string'
         },
-        state: {
+        stateId: {
             model: 'state'
         },
-        constituency: {
+        state: {
+            type :'json'
+        },
+        constituencyId: {
             model: 'constituency'
         },
-        district: {
+        constituency : {
+            type : 'json'
+        },
+        districtId: {
             model: 'district'
+        },
+        district : {
+            type : 'json'
         },
         isDeleted: {
             type: 'boolean',
