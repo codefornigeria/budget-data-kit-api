@@ -45,6 +45,7 @@ var slug = require('slug');
             type: 'boolean',
             defaultsTo: false
         }
+
     },
     beforeCreate: function (values, cb) {
         values.slug = slug(values.name, {lower: true});
