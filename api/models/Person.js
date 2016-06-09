@@ -41,6 +41,10 @@ var slug = require('slug');
         district : {
             type : 'json'
         },
+        projects:{
+            collection:'project',
+            via:'personId'
+        },
         isDeleted: {
             type: 'boolean',
             defaultsTo: false
