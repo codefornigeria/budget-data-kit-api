@@ -78,7 +78,6 @@ module.exports = {
                   
                     return ResponseService.json(400, res, "Error Retrieving search results")
                 }
-                console.log(results)
                   var uniqResult ={
 
                     }
