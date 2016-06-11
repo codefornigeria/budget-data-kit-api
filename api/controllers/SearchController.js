@@ -52,6 +52,7 @@ module.exports = {
 
 
                             projects.forEach(function(project) {
+                                    project.description = project.description.toLowerCase();
                                     var foundPerson = _.find(searchResult.person, { _id: project.person.id })
                                     if (!foundPerson) {
                                         project.person.dataType = 'person';
