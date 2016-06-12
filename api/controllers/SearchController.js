@@ -92,10 +92,10 @@ module.exports = {
 
                     }
                     uniqResult.person = _.uniq(results.person , function(person){
-                        return person._id
+                        return person.id
                     })
                     uniqResult.project = _.uniq(results.project,function(project){
-                        return project._id
+                        return project.id
                     })
                 return ResponseService.json(200, res, " Search Results Retrieved Successfully", uniqResult);
             })
