@@ -516,7 +516,7 @@ module.exports = {
             id: req.params.id
         }
 
-        Project.findOne(criteria).populate('person').then(function(project) {
+        Project.findOne(criteria).then(function(project) {
                 if (!project) {
                     return ResponseService.json(404, res, "Project not found");
                 }
