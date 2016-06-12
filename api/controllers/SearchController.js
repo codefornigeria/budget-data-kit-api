@@ -30,6 +30,9 @@ module.exports = {
                                 callback(err);
                             }
                             if (person) {
+                                if(person._id){
+                                    person.id = person._id;
+                                }
                                 searchResult.person = person;
                             } else {
                                 person = [];
@@ -52,10 +55,16 @@ module.exports = {
 
 
                             projects.forEach(function(project) {
+                                    if(project._id){
+                                        project.id = project._id;
+                                    }
                                     project.description = project.description.toLowerCase();
                                     var foundPerson = _.find(searchResult.person, { _id: project.person.id })
                                     if (!foundPerson) {
                                         project.person.dataType = 'person';
+                                        if(project.person._id){
+                                            project.person.id = prokect.person.id;
+                                        }
                                         searchResult.person.push(project.person);
                                     }
                                 })
