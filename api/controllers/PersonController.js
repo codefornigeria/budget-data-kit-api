@@ -522,9 +522,12 @@ module.exports = {
                 }
                 if(person.projects.length){
                     person.projects.map(function(project){
-                        console.log(this);
+
+                    this.totalProjectValue =  this.totalProjectValue + parseFloat(project.cost);
                     } , person)
                 }
+
+                console.log(person);
                 return ResponseService.json(200, res, "Person retrieved successfully", person);
             })
             .catch(function(err) {
