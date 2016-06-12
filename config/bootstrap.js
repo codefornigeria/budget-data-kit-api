@@ -48,7 +48,7 @@ module.exports.bootstrap = function(cb) {
         var statesData = []
         sails.config.states.forEach(function(state) {
             var data = {
-                name: state.name,
+                name: state.name.toLowerCase(),
                 countrySlug: 'nigeria',
                 stateCode: state.state_code,
                 lat: state.latitude,
@@ -85,7 +85,7 @@ module.exports.bootstrap = function(cb) {
             var lgaDataJson = JSON.parse(lgadata);
             lgaDataJson.features.forEach(function(lga) {
                 var data = {
-                    name: lga.properties.lganame,
+                    name: lga.properties.lganame.toLowerCase(),
                     lgaCode: lga.properties.lgacode,
                     amapCode: lga.properties.amapcode
                         // location: {
@@ -139,7 +139,7 @@ module.exports.bootstrap = function(cb) {
         var districtsData = []
         sails.config.senators.forEach(function(senators) {
             var data = {
-                name: senators.StateDistrict,
+                name: senators.StateDistrict.toLowerCase(),
                 stateSlug: slug(senators.State),
                 // lat: state.latitude,
                 // long: state.longitude,
@@ -284,8 +284,8 @@ module.exports.bootstrap = function(cb) {
                         data.districtId = district.id
                         data.district = district
                     }
-                    data.name = senator.Name;
-                    data.party = senator.Party;
+                    data.name = senator.Name.toLowerCase();
+                    data.party = senator.Party.toLowerCase();
                     data.phone = senator.Phone;
                     Person.create(data).exec(function cb(err, person) {
                         if (err) {
@@ -322,10 +322,10 @@ module.exports.bootstrap = function(cb) {
         var totalsaved = 0;
         sails.config.projects.forEach(function(project) {
             var data = {};
-            data.description = project.ProjectDescription
-            data.projectState = project.ProjectState
-            data.agency = project.Agency
-            data.ministry = project.Ministry
+            data.description = project.ProjectDescription.toLowerCase();
+            data.projectState = project.ProjectState.toLowerCase();
+            data.agency = project.Agency.toLowerCase();
+            data.ministry = project.Ministry.toLowerCase();
             data.cost = project.Amount
             District.findOne({ slug: slug(project.SenatorDistrict, { lower: true }) }).populate('state').exec(function cb(err, district) {
                 if (err) {
