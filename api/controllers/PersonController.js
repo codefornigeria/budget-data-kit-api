@@ -520,6 +520,7 @@ module.exports = {
                 if (!person) {
                     return ResponseService.json(404, res, "Person not found");
                 }
+                person.totalProjectValue = 0;
                 if(person.projects.length){
                     person.projects.map(function(project){
 
