@@ -515,9 +515,15 @@ module.exports = {
             isDeleted: false,
             id: req.params.id
         }
+        var totalProjectValue = 0
         Person.findOne(criteria).populate('projects').then(function(person) {
                 if (!person) {
                     return ResponseService.json(404, res, "Person not found");
+                }
+                if(person.projects.length){
+                    person.projects.map(function(project){
+                        console.log(this);
+                    } , person)
                 }
                 return ResponseService.json(200, res, "Person retrieved successfully", person);
             })
