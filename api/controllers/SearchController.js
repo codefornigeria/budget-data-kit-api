@@ -25,20 +25,17 @@ module.exports = {
                 function(callback) {
                     var searchResult = {}
                     setTimeout(function() {
-                        sails.controllers.search.searchPerson(query, function(err, person) {
+                        sails.controllers.search.searchPerson(query, function(err, persons) {
                             if (err) {
                                 callback(err);
                             }
-                            if (person) {
-                                if (person._id) {
-                                    console.log('person id found')
-                                    person.id = person._id;
+
+                            persons.forEach(function(person){
+                                if(person._id){
+                                    person.id = person._id
                                 }
-                                searchResult.person = person;
-                            } else {
-                                person = [];
-                            }
-                            searchResult.person = person
+                            })
+                            searchResult.person = persons
                             callback(null, searchResult)
 
                         })
