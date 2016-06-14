@@ -21,7 +21,8 @@ module.exports = {
             // change to waterfall 
             // find person then project then persons
 
-        async.waterfall([
+        async.waterfall(
+            [
                 function(callback) {
                     var searchResult = {}
                     setTimeout(function() {
@@ -210,7 +211,64 @@ module.exports = {
         /*
          * this function handles search on the front page
          */
-    
+        async.waterfall([
+             function(callback) {
+                    var searchResult = {}
+                    setTimeout(function() {
+                       Person.native(function(err, collection){
+                        if(err){
+                            callback(err)
+                        }
+                        collection.aggregate( { $sample: { size: 3 } } ).toArray(function(err,persons){
+                            if(err){
+
+                                callback(err)
+                            }
+                            persons.forEach(function(person){
+                                if(person._id){
+                                    person.id = person._id;
+                                }
+                            })
+                            searchResult.person = persons;
+                            callback(null, searchResult);
+                        })
+                       })
+
+                    }, 100)
+                },
+                 function(searchresult,callback) {
+
+                    var searchResult = searchresult
+                    setTimeout(function() {
+                        Project.native(function(err,collection){
+                            if(err){
+                                callback(err)
+                            }
+                            collection.aggregate( { $sample: { size: 3 } } ).toArray(function(err,projects){
+                                if(err){
+                                    callback(err);
+                                }
+                                projects.forEach(function(project){
+                                    if(project._id){
+                                        project.id = project._id;
+                                    }
+
+                                })
+                                searchResult.project = projects;
+                                callback(null, searchResult);
+                            })
+                        })
+                    }, 100)
+                },
+            ] , function(err, result){
+             if (err) {
+
+                    return ResponseService.json(400, res, "Error Retrieving search results")
+                }
+                
+                return ResponseService.json(200, res, " Search Results Retrieved Successfully", result);
+
+        })
         
     }
 
