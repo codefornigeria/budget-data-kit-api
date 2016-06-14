@@ -30,7 +30,7 @@ module.exports = {
                                 callback(err);
                             }
                             if (person) {
-                                if(person._id){
+                                if (person._id) {
                                     person.id = person._id;
                                 }
                                 searchResult.person = person;
@@ -45,6 +45,7 @@ module.exports = {
                 },
 
                 function(searchresult, callback) {
+                    console.log(searchresult.person)
                     var searchResult = searchresult;
                     searchResult.project = [];
                     setTimeout(function() {
@@ -55,15 +56,16 @@ module.exports = {
 
 
                             projects.forEach(function(project) {
-                                    if(project._id){
+                                    if (project._id) {
                                         project.id = project._id;
                                     }
                                     project.description = project.description.toLowerCase();
                                     var foundPerson = _.find(searchResult.person, { _id: project.person.id })
                                     if (!foundPerson) {
                                         project.person.dataType = 'person';
-                                        if(project.person._id){
-                                            project.person.id = prokect.person.id;
+                                        if (project.person._id) {
+                                            project.person.id = project.person._id;
+
                                         }
                                         searchResult.person.push(project.person);
                                     }
@@ -85,18 +87,18 @@ module.exports = {
                 }
             ], function(err, results) {
                 if (err) {
-                  
+
                     return ResponseService.json(400, res, "Error Retrieving search results")
                 }
-                  var uniqResult ={
+                var uniqResult = {
 
-                    }
-                    uniqResult.person = _.uniq(results.person , function(person){
-                        return person.id
-                    })
-                    uniqResult.project = _.uniq(results.project,function(project){
-                        return project.id
-                    })
+                }
+                uniqResult.person = _.uniq(results.person, function(person) {
+                    return person.id
+                })
+                uniqResult.project = _.uniq(results.project, function(project) {
+                    return project.id
+                })
                 return ResponseService.json(200, res, " Search Results Retrieved Successfully", uniqResult);
             })
             // async.parallel({
@@ -162,7 +164,7 @@ module.exports = {
             if (err) {
                 console.log(err)
             }
-            collection.find({ personId: {$in: query} }).toArray(function(err, project) {
+            collection.find({ personId: { $in: query } }).toArray(function(err, project) {
                 if (err) {
                     console.log(err)
                 }
@@ -204,6 +206,14 @@ module.exports = {
     searchConstituency: function(query) {
 
     },
+
+    homeSearch : function(req,res) {
+        /*
+         * this function handles search on the front page
+         */
+    
+        
+    }
 
 
 
