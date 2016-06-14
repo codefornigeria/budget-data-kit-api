@@ -31,6 +31,7 @@ module.exports = {
                             }
                             if (person) {
                                 if (person._id) {
+                                    console.log('person id found')
                                     person.id = person._id;
                                 }
                                 searchResult.person = person;
@@ -45,6 +46,7 @@ module.exports = {
                 },
 
                 function(searchresult, callback) {
+                    console.log('checking recorded person');
                     console.log(searchresult.person)
                     var searchResult = searchresult;
                     searchResult.project = [];
