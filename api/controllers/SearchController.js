@@ -36,8 +36,7 @@ module.exports = {
                                     person.id = person._id
                                 }
                             })
-                            console.log(persons);
-                            searchResult.person = persons
+                             searchResult.person = persons
                             callback(null, searchResult)
 
                         })
@@ -73,20 +72,7 @@ module.exports = {
                             callback(null, searchResult)
 
                         })
-                        // sails.controllers.search.searchPerson(query, function(err, persons) {
-                        //     if (err) {
-                        //         callback(err);
-                        //     }
-
-                        //     persons.forEach(function(person){
-                        //         if(person._id){
-                        //             person.id = person._id
-                        //         }
-                        //     })
-                        //     searchResult.person = persons
-                        //     callback(null, searchResult)
-
-                        // })
+                       
                     }, 100)
                 },
 
