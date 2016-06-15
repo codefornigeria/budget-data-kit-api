@@ -336,7 +336,18 @@ module.exports = {
             return [count, findQuery]
 
         }).spread(function(count, persons) {
+
             if (persons.length) {
+
+                persons.forEach(function(person){
+                    var totalBudget=0;
+                     if(person.projects.length) {
+                                    person.projects.forEach(function(project){
+                                        totalBudget = totalBudget + parseFloat(project.cost);
+                                    })
+                                }
+                                person.totalBudget = totalBudget;
+                })
                 var numberOfPages = Math.ceil(count / pagination.limit)
                 var nextPage = parseInt(pagination.page) + 1;
                 var meta = {
