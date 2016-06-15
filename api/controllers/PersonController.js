@@ -340,6 +340,7 @@ module.exports = {
             if (persons.length) {
 
                 persons.forEach(function(person){
+                    person.name = person.name.toLowerCase();
                     var totalBudget=0;
                      if(person.projects.length) {
                                     person.projects.forEach(function(project){
