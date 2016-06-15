@@ -534,7 +534,7 @@ module.exports = {
                 person.totalProjectValue = 0;
                 if(person.projects.length){
                     person.projects.map(function(project){
-
+                    project.description = project.description.toLowerCase();
                     this.totalProjectValue =  this.totalProjectValue + parseFloat(project.cost);
                     } , person)
                 }

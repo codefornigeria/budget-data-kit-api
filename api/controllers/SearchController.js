@@ -32,6 +32,7 @@ module.exports = {
                             }
 
                             persons.forEach(function(person){
+
                                 if(person._id){
                                     person.id = person._id
                                 }
@@ -55,15 +56,18 @@ module.exports = {
                                 callback(err)
                             }
                                 persons.forEach(function(person){
+
                                     var totalBudget = 0;
                                 if(person._id){
                                     person.id = person._id
                                 }
                                 if(person.projects.length) {
                                     person.projects.forEach(function(project){
+                                        project.description = project.description.toLowerCase();
                                         totalBudget = totalBudget + parseFloat(project.cost);
                                     })
                                 }
+                                person.name = person.name.toLowerCase();
                                 person.totalBudget = totalBudget;
                             })
 
@@ -98,6 +102,7 @@ module.exports = {
                                             project.person.id = project.person._id;
 
                                         }
+                                        project.person.name = project.person.name.toLowerCase();
                                         searchResult.person.push(project.person);
                                     }
                                 })
