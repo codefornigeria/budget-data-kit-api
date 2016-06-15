@@ -36,16 +36,61 @@ module.exports = {
                                     person.id = person._id
                                 }
                             })
+                            console.log(persons);
                             searchResult.person = persons
                             callback(null, searchResult)
 
                         })
                     }, 100)
                 },
+                 function(searchresult,callback) {
+                    var searchResult =searchresult
+                    var personIds = searchResult.person.map(function(person){
+                        return person._id;
+                    })
+
+
+                    setTimeout(function() {
+                        Person.find({ _id : {$in : personIds} }).populate('projects').exec(function(err, persons){
+                            if(err){
+                                callback(err)
+                            }
+                                persons.forEach(function(person){
+                                    var totalBudget = 0;
+                                if(person._id){
+                                    person.id = person._id
+                                }
+                                if(person.projects.length) {
+                                    person.projects.forEach(function(project){
+                                        totalBudget = totalBudget + parseFloat(project.cost);
+                                    })
+                                }
+                                person.totalBudget = totalBudget;
+                            })
+
+                            console.log(persons);
+                            searchResult.person = persons
+                            callback(null, searchResult)
+
+                        })
+                        // sails.controllers.search.searchPerson(query, function(err, persons) {
+                        //     if (err) {
+                        //         callback(err);
+                        //     }
+
+                        //     persons.forEach(function(person){
+                        //         if(person._id){
+                        //             person.id = person._id
+                        //         }
+                        //     })
+                        //     searchResult.person = persons
+                        //     callback(null, searchResult)
+
+                        // })
+                    }, 100)
+                },
 
                 function(searchresult, callback) {
-                    console.log('checking recorded person');
-                    console.log(searchresult.person)
                     var searchResult = searchresult;
                     searchResult.project = [];
                     setTimeout(function() {
