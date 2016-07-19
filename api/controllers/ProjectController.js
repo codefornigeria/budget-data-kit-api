@@ -13,7 +13,7 @@ module.exports = {
      * @apiSuccess {String} response.message response message
      * @apiSuccess {Object} response.data variable holding actual data
      */
-    
+
     /**
      * @apiDefine  DoctorHeader
      * @apiHeader {String} Authorization Basic authorization header token
@@ -116,25 +116,25 @@ module.exports = {
      */
     create: function(req, res) {
         var data = req.body;
-    var verifyPayload =  {
-        name : data.name ,
-        isDeleted : false
-     }   
+        var verifyPayload = {
+            name: data.name,
+            isDeleted: false
+        }
 
-    Doctor.validateDoctor(verifyPayload).then(function(doctor){
+        Doctor.validateDoctor(verifyPayload).then(function(doctor) {
             var existingDoctor = false
-             var DoctorCreateQry =false
-             if(doctor) {
+            var DoctorCreateQry = false
+            if (doctor) {
                 existingDoctor = true
                 DoctorCreateQry = doctor
-             }
-            if(!doctor) {
-             DoctorCreateQry = Doctor.create(data);
             }
-            return [existingDoctor,DoctorCreateQry];
-        }).spread(function(existingDoctor,doctor) {
-            if(existingDoctor){
-                       return ResponseService.json(200, res, "Doctor already exists", doctor);
+            if (!doctor) {
+                DoctorCreateQry = Doctor.create(data);
+            }
+            return [existingDoctor, DoctorCreateQry];
+        }).spread(function(existingDoctor, doctor) {
+            if (existingDoctor) {
+                return ResponseService.json(200, res, "Doctor already exists", doctor);
             }
             if (doctor) {
                 return ResponseService.json(200, res, "Doctor created successfully", doctor);
@@ -146,7 +146,7 @@ module.exports = {
 
     },
 
-    
+
 
     /**
      * @api {post} /doctors Batch Create Doctor
@@ -227,11 +227,11 @@ module.exports = {
     batchCreate: function(req, res) {
 
 
-         var doctors = req.body.doctors;
-   
+        var doctors = req.body.doctors;
+
         var promiseArray = [];
         for (var i = 0, len = doctors.length; i < len; i++) {
-         
+
             try {
                 promiseArray.push(Doctor.create(doctors[i]));
             } catch (e) {
@@ -244,7 +244,7 @@ module.exports = {
 
 
     },
-    
+
     /**
      * @api {get} /doctor List Doctors
      * @apiName List  Doctors
@@ -317,11 +317,11 @@ module.exports = {
         if (req.query.name) {
             criteria.name = req.query.name; // change this to starts with  or endswith
         }
- if (req.query.specialization) {
+        if (req.query.specialization) {
             criteria.specialization = req.query.specialization;
         }
 
-         if (req.query.email) {
+        if (req.query.email) {
             criteria.email = req.query.email;
         }
         if (req.query.telephone) {
@@ -338,9 +338,9 @@ module.exports = {
         }).spread(function(count, projects) {
 
             if (projects.length) {
-                projects.forEach(function(project){
-                project.description = project.description.toLowerCase();
-            })
+                projects.forEach(function(project) {
+                    project.description = project.description.toLowerCase();
+                })
                 var numberOfPages = Math.ceil(count / pagination.limit)
                 var nextPage = parseInt(pagination.page) + 1;
                 var meta = {
@@ -353,7 +353,7 @@ module.exports = {
                 }
                 return ResponseService.json(200, res, " Projects retrieved successfully", projects, meta);
             } else {
-                return ResponseService.json(200, res,"Projects not found", [])
+                return ResponseService.json(200, res, "Projects not found", [])
             }
         }).catch(function(err) {
             return ValidationService.jsonResolveError(err, res);
@@ -430,15 +430,15 @@ module.exports = {
         };
 
         if (req.query.name) {
-            criteria.name ={
+            criteria.name = {
                 'startsWith': req.query.name
             }; // change this to starts with  or endswith
         }
- if (req.query.specialization) {
+        if (req.query.specialization) {
             criteria.specialization = req.query.specialization;
         }
 
-         if (req.query.email) {
+        if (req.query.email) {
             criteria.email = req.query.email;
         }
         if (req.query.telephone) {
@@ -465,7 +465,7 @@ module.exports = {
                 }
                 return ResponseService.json(200, res, " Doctors retrieved successfully", doctors, meta);
             } else {
-                return ResponseService.json(200, res,"Doctors not found", [])
+                return ResponseService.json(200, res, "Doctors not found", [])
             }
         }).catch(function(err) {
             return ValidationService.jsonResolveError(err, res);
@@ -542,7 +542,7 @@ module.exports = {
      * @apiUse DoctorSuccessResponseData
      *
      * 
-    * @apiParam {Integer} school  school id
+     * @apiParam {Integer} school  school id
      * @apiParam {String} faculty Faculty id
      * @apiParam {String} [discipline] Discipline id
      * @apiParam {String} name course name 
