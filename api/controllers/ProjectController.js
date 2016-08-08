@@ -336,7 +336,11 @@ module.exports = {
             return [count, findQuery]
 
         }).spread(function(count, projects) {
+
             if (projects.length) {
+                projects.forEach(function(project){
+                project.description = project.description.toLowerCase();
+            })
                 var numberOfPages = Math.ceil(count / pagination.limit)
                 var nextPage = parseInt(pagination.page) + 1;
                 var meta = {
