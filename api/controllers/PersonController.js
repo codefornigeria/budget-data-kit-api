@@ -6,27 +6,33 @@
  */
 
 var Promise = require('bluebird');
+var google = require('googleapis');
+var KG_API_KEY  = 'AIzaSyCkaLpGSWMwYYBRPA3Gcl0UHnfFX-ItetQ';
+var kgsearch = google.kgsearch('v1');
+var kgSearchPromise = Promise.promisify(kgsearch.entities.search);
+var jsonld = require('jsonld');
+
 module.exports = {
     /**
-     * @apiDefine DoctorSuccessResponseData
+     * @apiDefine PersonSuccessResponseData
      * @apiSuccess {Object} response variable holding response data
      * @apiSuccess {String} response.message response message
      * @apiSuccess {Object} response.data variable holding actual data
      */
     
     /**
-     * @apiDefine  DoctorHeader
+     * @apiDefine  PerosnHeader
      * @apiHeader {String} Authorization Basic authorization header token
      */
 
 
     /**
-     * @api {post} /doctor Create Doctor
-     * @apiName Create Doctor
-     * @apiGroup Doctor
+     * @api {post} /person Create Person
+     * @apiName Create Person
+     * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     *   @apiUse DoctorHeader
+     *   @apiUse Personheader
      * 
      *
      * @apiParam {String} name  doctor name
@@ -36,13 +42,13 @@ module.exports = {
      * @apiParam {String} email Doctor Email Address
      * @apiParam {String} picture Doctor avatar
      *
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse PersonSuccessResponseData
      *
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
      * {
      *     "response": {
-     *     "message": "Course created successfully",
+     *     "message": "Person created successfully",
      *     "data": {
      *         "school": "56ac782720d141560b2bf08f",
      *         "faculty": "56ac8a42aad4b35e0e091e13",
@@ -151,10 +157,10 @@ module.exports = {
     /**
      * @api {post} /doctors Batch Create Doctor
      * @apiName Batch Create Doctor
-     * @apiGroup Doctor
+     * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     *   @apiUse DoctorHeader
+     *   @apiUse Personheader
      * @apiParam {Array}  doctors   Doctors Object Array
      * @apiParam {String} name  doctor name
      * @apiParam {String} address Doctor address
@@ -166,7 +172,7 @@ module.exports = {
       
      *
  \    *
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse PersonSuccessResponseData
      *
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
@@ -248,13 +254,13 @@ module.exports = {
     /**
      * @api {get} /doctor List Doctors
      * @apiName List  Doctors
-     * @apiGroup Doctor
+     * @apiGroup Person
      * @apiVersion 0.0.1
      *
      *
-     *  @apiUse DoctorHeader
+     *  @apiUse Personheader
      *  
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse PersonSuccessResponseData
      *
      * 
      * @apiSuccessExample Success-Response
@@ -336,19 +342,7 @@ module.exports = {
             return [count, findQuery]
 
         }).spread(function(count, persons) {
-
             if (persons.length) {
-
-                persons.forEach(function(person){
-                    person.name = person.name.toLowerCase();
-                    var totalBudget=0;
-                     if(person.projects.length) {
-                                    person.projects.forEach(function(project){
-                                        totalBudget = totalBudget + parseFloat(project.cost);
-                                    })
-                                }
-                                person.totalBudget = totalBudget;
-                })
                 var numberOfPages = Math.ceil(count / pagination.limit)
                 var nextPage = parseInt(pagination.page) + 1;
                 var meta = {
@@ -371,13 +365,13 @@ module.exports = {
     /**
      * @api {get} /doctor/search Search Doctors
      * @apiName Search  Doctors
-     * @apiGroup Doctor
+     * @apiGroup Person
      * @apiVersion 0.0.1
      *
      *
-     *  @apiUse DoctorHeader
+     *  @apiUse Personheader
      *  
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse PersonSuccessResponseData
      *
      * 
      * @apiSuccessExample Success-Response
@@ -480,15 +474,15 @@ module.exports = {
         });
     },
     /**
-     * @api {get} /doctor/:id View Doctor
-     * @apiName View  Doctor
-     * @apiGroup Doctor
+     * @api {get} /doctor/:id View Person
+     * @apiName View  Person
+     * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     * @apiUse DoctorHeader
+     * @apiUse Personheader
      *
      * @apiParam {String} id Doctor id
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse PersonSuccessResponseData
      *
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
@@ -527,36 +521,42 @@ module.exports = {
             isDeleted: false,
             id: req.params.id
         }
-        var totalProjectValue = 0
         Person.findOne(criteria).populate('projects').then(function(person) {
                 if (!person) {
                     return ResponseService.json(404, res, "Person not found");
                 }
-                person.totalProjectValue = 0;
-                if(person.projects.length){
-                    person.projects.map(function(project){
-                    project.description = project.description.toLowerCase();
-                    this.totalProjectValue =  this.totalProjectValue + parseFloat(project.cost);
-                    } , person)
-                }
+                personKgEntity = kgSearchPromise({key:KG_API_KEY, query: person.name});
 
-                console.log(person);
+                return [person , personKgEntity];
+
+            }).spread(function(person, personEntity){
+                    
+                 
+                    if(personEntity.itemListElement){
+
+                    person.graphData =  personEntity.itemListElement[0].result
+                    console.log(person.graphData);
+                        
+                }else {
+                    person.graphData = null;
+                }
                 return ResponseService.json(200, res, "Person retrieved successfully", person);
+         
             })
             .catch(function(err) {
-                return ValidationService.jsonResolveError(err, res);
+                return ValidationService.jsonResolveError(err, res );
             });
     },
 
     /**
      * @api {put} /doctor/:id Update doctor
      * @apiName Update Doctor
-     * @apiGroup Doctor
+     * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     *  @apiUse DoctorHeader
+     *  @apiUse Personheader
      * 
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse PersonSuccessResponseData
      *
      * 
     * @apiParam {Integer} school  school id
@@ -637,12 +637,12 @@ module.exports = {
     /**
      * @api {delete} /doctor/:id Delete Doctor
      * @apiName Delete Doctor
-     * @apiGroup Doctor
+     * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     *  @apiUse DoctorHeader
+     *  @apiUse Personheader
      *
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse PersonSuccessResponseData
      *
      *   @apiParam {String} Doctor id
      * 
