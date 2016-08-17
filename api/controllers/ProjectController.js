@@ -8,25 +8,25 @@
 var Promise = require('bluebird');
 module.exports = {
     /**
-     * @apiDefine DoctorSuccessResponseData
+     * @apiDefine ProjectSuccessResponseData
      * @apiSuccess {Object} response variable holding response data
      * @apiSuccess {String} response.message response message
      * @apiSuccess {Object} response.data variable holding actual data
      */
     
     /**
-     * @apiDefine  DoctorHeader
+     * @apiDefine  ProjectHeader
      * @apiHeader {String} Authorization Basic authorization header token
      */
 
 
     /**
-     * @api {post} /doctor Create Doctor
-     * @apiName Create Doctor
-     * @apiGroup Doctor
+     * @api {post} /doctor Create Project
+     * @apiName Create Project
+     * @apiGroup Project
      * @apiVersion 0.0.1
      *
-     *   @apiUse DoctorHeader
+     *   @apiUse ProjectHeader
      * 
      *
      * @apiParam {String} name  doctor name
@@ -36,7 +36,7 @@ module.exports = {
      * @apiParam {String} email Doctor Email Address
      * @apiParam {String} picture Doctor avatar
      *
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse ProjectSuccessResponseData
      *
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
@@ -151,10 +151,10 @@ module.exports = {
     /**
      * @api {post} /doctors Batch Create Doctor
      * @apiName Batch Create Doctor
-     * @apiGroup Doctor
+     * @apiGroup Project
      * @apiVersion 0.0.1
      *
-     *   @apiUse DoctorHeader
+     *   @apiUse ProjectHeader
      * @apiParam {Array}  doctors   Doctors Object Array
      * @apiParam {String} name  doctor name
      * @apiParam {String} address Doctor address
@@ -166,7 +166,7 @@ module.exports = {
       
      *
  \    *
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse ProjectSuccessResponseData
      *
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
@@ -246,15 +246,15 @@ module.exports = {
     },
     
     /**
-     * @api {get} /doctor List Doctors
-     * @apiName List  Doctors
-     * @apiGroup Doctor
+     * @api {get} /project List Projects
+     * @apiName List  Projects
+     * @apiGroup Project
      * @apiVersion 0.0.1
      *
      *
-     *  @apiUse DoctorHeader
+     *  @apiUse ProjectHeader
      *  
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse ProjectSuccessResponseData
      *
      * 
      * @apiSuccessExample Success-Response
@@ -363,13 +363,13 @@ module.exports = {
     /**
      * @api {get} /doctor/search Search Doctors
      * @apiName Search  Doctors
-     * @apiGroup Doctor
+     * @apiGroup Project
      * @apiVersion 0.0.1
      *
      *
-     *  @apiUse DoctorHeader
+     *  @apiUse ProjectHeader
      *  
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse ProjectSuccessResponseData
      *
      * 
      * @apiSuccessExample Success-Response
@@ -472,21 +472,21 @@ module.exports = {
         });
     },
     /**
-     * @api {get} /doctor/:id View Doctor
-     * @apiName View  Doctor
-     * @apiGroup Doctor
+     * @api {get} /doctor/:id View Project
+     * @apiName View  Project
+     * @apiGroup Project
      * @apiVersion 0.0.1
      *
-     * @apiUse DoctorHeader
+     * @apiUse ProjectHeader
      *
-     * @apiParam {String} id Doctor id
-     * @apiUse DoctorSuccessResponseData
+     * @apiParam {String} id PRoject id
+     * @apiUse ProjectSuccessResponseData
      *
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
      * {
      *    response: {
-     *        message: "Doctor retrieved successfully",
+     *        message: "Project retrieved successfully",
      *        data: {
      *              school: "35467irefc4t5",
      *              faculty: "dgbfdt35466736554",
@@ -532,14 +532,14 @@ module.exports = {
     },
 
     /**
-     * @api {put} /doctor/:id Update doctor
-     * @apiName Update Doctor
-     * @apiGroup Doctor
+     * @api {put} /project/:id Update Project
+     * @apiName Update Project
+     * @apiGroup Project
      * @apiVersion 0.0.1
      *
-     *  @apiUse DoctorHeader
+     *  @apiUse ProjectHeader
      * 
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse ProjectSuccessResponseData
      *
      * 
     * @apiParam {Integer} school  school id
@@ -620,12 +620,12 @@ module.exports = {
     /**
      * @api {delete} /doctor/:id Delete Doctor
      * @apiName Delete Doctor
-     * @apiGroup Doctor
+     * @apiGroup Project
      * @apiVersion 0.0.1
      *
-     *  @apiUse DoctorHeader
+     *  @apiUse ProjectHeader
      *
-     * @apiUse DoctorSuccessResponseData
+     * @apiUse ProjectSuccessResponseData
      *
      *   @apiParam {String} Doctor id
      * 

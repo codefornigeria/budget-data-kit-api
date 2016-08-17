@@ -21,7 +21,7 @@ module.exports = {
      */
     
     /**
-     * @apiDefine  PerosnHeader
+     * @apiDefine  PersonHeader
      * @apiHeader {String} Authorization Basic authorization header token
      */
 
@@ -32,7 +32,7 @@ module.exports = {
      * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     *   @apiUse Personheader
+     *   @apiUse PersonHeader
      * 
      *
      * @apiParam {String} name  doctor name
@@ -160,7 +160,7 @@ module.exports = {
      * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     *   @apiUse Personheader
+     * @apiUse PersonHeader
      * @apiParam {Array}  doctors   Doctors Object Array
      * @apiParam {String} name  doctor name
      * @apiParam {String} address Doctor address
@@ -169,9 +169,8 @@ module.exports = {
      * @apiParam {String} email Doctor Email Address
      * @apiParam {String} picture Doctor avatar
      *
-      
      *
- \    *
+     *
      * @apiUse PersonSuccessResponseData
      *
      * @apiSuccessExample Success-Response
@@ -230,6 +229,9 @@ module.exports = {
      * @apiError (Error 500) {Object} response variable holding response data
      * @apiError (Error 500) {String} response.message response message
      */
+    
+
+
     batchCreate: function(req, res) {
 
 
@@ -258,7 +260,7 @@ module.exports = {
      * @apiVersion 0.0.1
      *
      *
-     *  @apiUse Personheader
+     * @apiUse PersonHeader
      *  
      * @apiUse PersonSuccessResponseData
      *
@@ -310,6 +312,8 @@ module.exports = {
      * @apiError (Error 400) {Object} response variable holding response data
      * @apiError (Error 400) {String} response.message response message
      */
+    
+
     list: function(req, res) {
         var pagination = {
             page: parseInt(req.query.page) || 1,
@@ -323,16 +327,19 @@ module.exports = {
         if (req.query.name) {
             criteria.name = req.query.name; // change this to starts with  or endswith
         }
- if (req.query.specialization) {
+
+        if (req.query.specialization) {
             criteria.specialization = req.query.specialization;
         }
 
-         if (req.query.email) {
+
+        if (req.query.email) {
             criteria.email = req.query.email;
         }
+
         if (req.query.telephone) {
             criteria.telephone = req.query.telephone;
-        }
+            }
 
 
         Person.count(criteria).then(function(count) {
@@ -369,7 +376,7 @@ module.exports = {
      * @apiVersion 0.0.1
      *
      *
-     *  @apiUse Personheader
+     *  @apiUse PersonHeader
      *  
      * @apiUse PersonSuccessResponseData
      *
@@ -436,7 +443,7 @@ module.exports = {
                 'startsWith': req.query.name
             }; // change this to starts with  or endswith
         }
- if (req.query.specialization) {
+        if (req.query.specialization) {
             criteria.specialization = req.query.specialization;
         }
 
@@ -473,13 +480,14 @@ module.exports = {
             return ValidationService.jsonResolveError(err, res);
         });
     },
+    
     /**
-     * @api {get} /doctor/:id View Person
+     * @api {get} /person/:id View Person
      * @apiName View  Person
      * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     * @apiUse Personheader
+     * @apiUse PersonHeader
      *
      * @apiParam {String} id Doctor id
      * @apiUse PersonSuccessResponseData
@@ -509,13 +517,15 @@ module.exports = {
      * HTTP/1.1 404 Not Found
      * {
      *    response: {
-     *        message: "Doctor not found"
+     *        message: "Person not found"
      *    }
      * }
      *
      * @apiError (Error 400) {Object} response variable holding response data
      * @apiError (Error 400) {String} response.message response message
      */
+    
+
     view: function(req, res) {
         var criteria = {
             isDeleted: false,
@@ -532,6 +542,11 @@ module.exports = {
             }).spread(function(person, personEntity){
                     
                  
+                    person.projects.map(function(project){
+                        project.description = project.description.toLowerCase();
+                        project.ministry =  project.ministry.toLowerCase();
+                        project.district.name  = project.district.name.toLowerCase();
+                    })
                     if(personEntity.itemListElement){
 
                     person.graphData =  personEntity.itemListElement[0].result
@@ -548,13 +563,14 @@ module.exports = {
             });
     },
 
+
     /**
-     * @api {put} /doctor/:id Update doctor
+     * @api {put} /person/:id Update PErson
      * @apiName Update Doctor
      * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     *  @apiUse Personheader
+     *  @apiUse PersonHeader
      * 
      * @apiUse PersonSuccessResponseData
      *
@@ -589,6 +605,8 @@ module.exports = {
      * @apiError (Error 400) {Object} response variable holding response data
      * @apiError (Error 400) {String} response.message response message
      */
+    
+
     update: function(req, res) {
         var data = req.body;
 
@@ -635,22 +653,22 @@ module.exports = {
 
 
     /**
-     * @api {delete} /doctor/:id Delete Doctor
-     * @apiName Delete Doctor
+     * @api {delete} /perosn/:id Delete Person
+     * @apiName Delete Person
      * @apiGroup Person
      * @apiVersion 0.0.1
      *
-     *  @apiUse Personheader
+     *  @apiUse PersonHeader
      *
      * @apiUse PersonSuccessResponseData
      *
-     *   @apiParam {String} Doctor id
+     *   @apiParam {String} Person id
      * 
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
      * {
      *    response: {
-     *        message: "Doctor deleted successfully",
+     *        message: "Person deleted successfully",
      * }
      *
      *
@@ -658,13 +676,15 @@ module.exports = {
      * HTTP/1.1 404 Not Found
      * {
      *    response: {
-     *        message: "Doctor not found"
+     *        message: "Person not found"
      *    }
      * }
      *
      * @apiError (Error 400) {Object} response variable holding response data
      * @apiError (Error 400) {String} response.message response message
      */
+    
+
     delete: function(req, res) {
         Doctor.update({
                 id: req.params.id,
