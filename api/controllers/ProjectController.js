@@ -21,7 +21,7 @@ module.exports = {
 
 
     /**
-     * @api {post} /doctor Create Project
+     * @api {post} /project Create Project
      * @apiName Create Project
      * @apiGroup Project
      * @apiVersion 0.0.1
@@ -116,41 +116,20 @@ module.exports = {
      */
     create: function(req, res) {
         var data = req.body;
-    var verifyPayload =  {
-        name : data.name ,
-        isDeleted : false
-     }   
-
-    Doctor.validateDoctor(verifyPayload).then(function(doctor){
-            var existingDoctor = false
-             var DoctorCreateQry =false
-             if(doctor) {
-                existingDoctor = true
-                DoctorCreateQry = doctor
-             }
-            if(!doctor) {
-             DoctorCreateQry = Doctor.create(data);
-            }
-            return [existingDoctor,DoctorCreateQry];
-        }).spread(function(existingDoctor,doctor) {
-            if(existingDoctor){
-                       return ResponseService.json(200, res, "Doctor already exists", doctor);
-            }
-            if (doctor) {
-                return ResponseService.json(200, res, "Doctor created successfully", doctor);
-            }
-
-        }).catch(function(err) {
-            return ValidationService.jsonResolveError(err, res);
-        });
+    
+        Project.create(data).then(function(project){
+            return ResponseService.json(200,res,"Project Created Successfully");
+        }).catch(function(err){
+            return ValidationService.jsonResolveError(err,res);
+        })
 
     },
 
     
 
     /**
-     * @api {post} /doctors Batch Create Doctor
-     * @apiName Batch Create Doctor
+     * @api {post} /projects Batch Create Projects
+     * @apiName Batch Create Projects
      * @apiGroup Project
      * @apiVersion 0.0.1
      *
@@ -172,7 +151,7 @@ module.exports = {
      * HTTP/1.1 200 OK
      * {
      * "response": {
-     * "message": "Courses created successfully",
+     * "message": "Projects created successfully",
      * "data": [{
      *     "school": "56ac782720d141560b2bf08f",
      *     "faculty": "56ac8a42aad4b35e0e091e13",
@@ -227,19 +206,19 @@ module.exports = {
     batchCreate: function(req, res) {
 
 
-         var doctors = req.body.doctors;
+         var projects = req.body.projects;
    
         var promiseArray = [];
-        for (var i = 0, len = doctors.length; i < len; i++) {
+        for (var i = 0, len = projects.length; i < len; i++) {
          
             try {
-                promiseArray.push(Doctor.create(doctors[i]));
+                promiseArray.push(Project.create(projects[i]));
             } catch (e) {
                 return ResponseService.json(500, res, "Internal Error: Please check inputs");
             }
         }
-        Promise.all(promiseArray).then(function(doctors) {
-            return ResponseService.json(200, res, "Doctors created successfully", doctors);
+        Promise.all(promiseArray).then(function(projects) {
+            return ResponseService.json(200, res, "Doctors created successfully", projects);
         });
 
 
@@ -360,119 +339,8 @@ module.exports = {
         });
     },
 
-    /**
-     * @api {get} /doctor/search Search Doctors
-     * @apiName Search  Doctors
-     * @apiGroup Project
-     * @apiVersion 0.0.1
-     *
-     *
-     *  @apiUse ProjectHeader
-     *  
-     * @apiUse ProjectSuccessResponseData
-     *
-     * 
-     * @apiSuccessExample Success-Response
-     * HTTP/1.1 200 OK
-     * {
-     *    response: {
-     *        message: "Doctors retrieved successfully",
-     *        data: [
-     *       {
-     *              school: "35467irefc4t5",
-     *              faculty: "dgbfdt35466736554",
-     *              name: "engineering mathematics",
-     *              shortName: " MTH 101",
-     *              active: true,
-     *              unit: 4,
-     *              description: "Engineering mathematics description",
-     *              createdAt: "2015-12-04T14:12:49.328Z",
-     *              updatedAt: "2015-12-04T14:12:49.328Z",
-     *              id: "56619f611d2b4c0170107d22"
-     *            },
-     *            {
-     *              school: "35467irefc4t5",
-     *              faculty: "dgbfdt35466736554",
-     *              name: "engineering mathematics",
-     *              shortName: " MTH 101",
-     *              active: true,
-     *              unit: 4,
-     *              description: "Engineering mathematics description",
-     *              createdAt: "2015-12-04T14:12:49.328Z",
-     *              updatedAt: "2015-12-04T14:12:49.328Z",
-     *              id: "56619f611d2b4c0170107d22"
-     *            }
-     *       ]
-     *    }
-     * }
-     *
-     *
-     * @apiErrorExample Error-Response
-     * HTTP/1.1 404 Not Found
-     * {
-     *    response: {
-     *        message: "Courses not found",
-     *        data : []
-     *    }
-     * }
-     *
-     * @apiError (Error 400) {Object} response variable holding response data
-     * @apiError (Error 400) {String} response.message response message
-     */
-    search: function(req, res) {
-        var pagination = {
-            page: parseInt(req.query.page) || 1,
-            limit: parseInt(req.query.perPage) || 10
-        };
-
-        var criteria = {
-            isDeleted: false
-        };
-
-        if (req.query.name) {
-            criteria.name ={
-                'startsWith': req.query.name
-            }; // change this to starts with  or endswith
-        }
- if (req.query.specialization) {
-            criteria.specialization = req.query.specialization;
-        }
-
-         if (req.query.email) {
-            criteria.email = req.query.email;
-        }
-        if (req.query.telephone) {
-            criteria.telephone = req.query.telephone;
-        }
-
-        Doctor.count(criteria).then(function(count) {
-            var findQuery = Doctor.find(criteria).populateAll()
-                .sort('createdAt DESC')
-                .paginate(pagination);
-            return [count, findQuery]
-
-        }).spread(function(count, doctors) {
-            if (doctors.length) {
-                var numberOfPages = Math.ceil(count / pagination.limit)
-                var nextPage = parseInt(pagination.page) + 1;
-                var meta = {
-                    page: pagination.page,
-                    perPage: pagination.limit,
-                    previousPage: (pagination.page > 1) ? parseInt(pagination.page) - 1 : false,
-                    nextPage: (numberOfPages >= nextPage) ? nextPage : false,
-                    pageCount: numberOfPages,
-                    total: count
-                }
-                return ResponseService.json(200, res, " Doctors retrieved successfully", doctors, meta);
-            } else {
-                return ResponseService.json(200, res,"Doctors not found", [])
-            }
-        }).catch(function(err) {
-            return ValidationService.jsonResolveError(err, res);
-        });
-    },
-    /**
-     * @api {get} /doctor/:id View Project
+  /**
+     * @api {get} /project/:id View Project
      * @apiName View  Project
      * @apiGroup Project
      * @apiVersion 0.0.1
@@ -579,14 +447,14 @@ module.exports = {
             delete data.isDeleted;
         }
 
-        Doctor.update({
+        Project.update({
                 id: req.params.id,
                 isDeleted: false
             }, data).then(function(updated) {
                 if (!updated.length) {
-                    return ResponseService.json(404, res, "Doctor not found");
+                    return ResponseService.json(404, res, "Project not found");
                 }
-                return ResponseService.json(200, res, "Doctor updated successfully", updated[0]);
+                return ResponseService.json(200, res, "Project updated successfully", updated[0]);
             })
             .catch(function(err) {
                 return ValidationService.jsonResolveError(err, res);
@@ -594,32 +462,32 @@ module.exports = {
     },
 
     batchUpdate: function(req, res) {
-        var doctors = req.body.doctors;
+        var projects = req.body.projects;
 
 
         var promiseArray = [];
-        for (var i = 0, len = doctors.length; i < len; i++) {
-            if (!doctors[i].id) {
+        for (var i = 0, len = projects.length; i < len; i++) {
+            if (!projects[i].id) {
                 continue;
             }
 
             try {
-                promiseArray.push(Doctor.update({
-                    id: doctors[i].id
-                }, doctors[i]));
+                promiseArray.push(Project.update({
+                    id: projects[i].id
+                }, projects[i]));
             } catch (e) {
                 return ResponseService.json(500, res, "Internal Error: Please check inputs");
             }
         }
-        Promise.all(promiseArray).then(function(doctors) {
-            return ResponseService.json(200, res, "Doctors updated successfully", doctors);
+        Promise.all(promiseArray).then(function(projects) {
+            return ResponseService.json(200, res, "Projects updated successfully", projects);
         });
     },
 
 
     /**
-     * @api {delete} /doctor/:id Delete Doctor
-     * @apiName Delete Doctor
+     * @api {delete} /project/:id Delete Doctor
+     * @apiName Delete Project
      * @apiGroup Project
      * @apiVersion 0.0.1
      *
@@ -649,15 +517,15 @@ module.exports = {
      * @apiError (Error 400) {String} response.message response message
      */
     delete: function(req, res) {
-        Doctor.update({
+        Project.update({
                 id: req.params.id,
             }, {
                 isDeleted: true
             }).then(function(deleted) {
                 if (!deleted.length) {
-                    return ResponseService.json(404, res, "Doctor not found");
+                    return ResponseService.json(404, res, "Project not found");
                 }
-                return ResponseService.json(200, res, "Doctor deleted successfully");
+                return ResponseService.json(200, res, "Project deleted successfully");
             })
             .catch(function(err) {
                 return ValidationService.jsonResolveError(err, res);
