@@ -1,12 +1,16 @@
 /**
- * ProjectController
+ * SearchController
  *
- * @description :: Server-side logic for managing Projects
+ * @description :: Server-side logic for managing Search
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
 var Promise = require('bluebird');
 var pager = require('sails-pager');
+var google = require('googleapis');
+var KG_API_KEY  = 'AIzaSyCkaLpGSWMwYYBRPA3Gcl0UHnfFX-ItetQ';
+var kgsearch = google.kgsearch('v1');
+var kgSearchPromise = Promise.promisify(kgsearch.entities.search);
 
 module.exports = {
 
@@ -14,7 +18,6 @@ module.exports = {
      * this  function does agregated search across specified categories returning the right set 
      * of data  updates will include adding viewType to ensure that  display method can 
      * handle the underlying dataset and use the correct view  display
-     * 
      */
     search: function(req, res) {
         var query = req.query.query
@@ -191,6 +194,25 @@ module.exports = {
                     })
                     cb(null, searchResult)
                 })
+        })
+    },
+     searchGraphByPerson: function(query, cb) {
+        var searchResult = [];
+
+        Project.native(function(err, collection) {
+            if (err) {
+                console.log(err)
+            }
+            collection.find({ personId: { $in: query } }).toArray(function(err, project) {
+                if (err) {
+                    console.log(err)
+                }
+                project.forEach(function(project) {
+                    project.dataType = 'person';
+                    searchResult.pusch(project)
+                })
+                cb(null, searchResult)
+            })
         })
     },
     searchProjectByPerson: function(query, cb) {
