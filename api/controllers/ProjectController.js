@@ -399,6 +399,62 @@ module.exports = {
             });
     },
 
+    
+    /**
+     * @api {put} /related-project/:id Retrieve Related Project 
+     * @apiName Retrieve Related Project
+     * @apiGroup Project
+     * @apiVersion 0.0.1
+     *
+     *  @apiUse ProjectHeader
+     * 
+     * @apiUse ProjectSuccessResponseData
+     *
+     * 
+    * @apiParam {Integer} if  project id
+     *
+     * @apiSuccessExample Success-Response
+     * HTTP/1.1 200 OK
+     * {
+     *    response: {
+     *        message: " Related Projects Found",
+     *        data: {}
+     *    }
+     * }
+     *
+     *
+     * @apiErrorExample Error-Response
+     * HTTP/1.1 404 Not Found
+     * {
+     *    response: {
+     *        message: "Course not found"
+     *    }
+     * }
+     *
+     * @apiError (Error 400) {Object} response variable holding response data
+     * @apiError (Error 400) {String} response.message response message
+     */
+    getRelatedProject: function(req , res) { 
+        // get current project
+        // using current project values 
+        // get other project that fits into that same region system 
+        
+        Project.findOne(req.params.id).then( function(project) {
+            if(!project) {
+                return  ResponseService.json(200, res , "Project not Found",);
+            }
+            relatedProjects = Project.find(criteria).limit(10);
+            return  [project, relatedProjects]
+        }).spread(function(project, relatedProjects) {
+            if(!relatedProjects.length) { 
+                return ResponseService.json(200, res, "Related Project not found", []);
+            }
+
+            return ResponseService.json(200, res , "Related Projects found", relatedProjects);
+        }).catch(function(err){
+            return ValidationService.jsonResolveError(err,res); 
+        })
+    },
     /**
      * @api {put} /project/:id Update Project
      * @apiName Update Project
