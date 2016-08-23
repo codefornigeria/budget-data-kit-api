@@ -441,7 +441,7 @@ module.exports = {
         
         Project.findOne(req.params.id).then( function(project) {
             if(!project) {
-                return  ResponseService.json(200, res , "Project not Found",);
+                return  ResponseService.json(200, res , "Project not Found");
             }
             relatedProjects = Project.find(criteria).limit(10);
             return  [project, relatedProjects]
