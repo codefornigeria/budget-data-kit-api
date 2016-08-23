@@ -13,7 +13,7 @@ module.exports = {
      * @apiSuccess {String} response.message response message
      * @apiSuccess {Object} response.data variable holding actual data
      */
-    
+
     /**
      * @apiDefine  ProjectHeader
      * @apiHeader {String} Authorization Basic authorization header token
@@ -116,16 +116,16 @@ module.exports = {
      */
     create: function(req, res) {
         var data = req.body;
-    
-        Project.create(data).then(function(project){
-            return ResponseService.json(200,res,"Project Created Successfully");
-        }).catch(function(err){
-            return ValidationService.jsonResolveError(err,res);
+
+        Project.create(data).then(function(project) {
+            return ResponseService.json(200, res, "Project Created Successfully");
+        }).catch(function(err) {
+            return ValidationService.jsonResolveError(err, res);
         })
 
     },
 
-    
+
 
     /**
      * @api {post} /projects Batch Create Projects
@@ -206,11 +206,11 @@ module.exports = {
     batchCreate: function(req, res) {
 
 
-         var projects = req.body.projects;
-   
+        var projects = req.body.projects;
+
         var promiseArray = [];
         for (var i = 0, len = projects.length; i < len; i++) {
-         
+
             try {
                 promiseArray.push(Project.create(projects[i]));
             } catch (e) {
@@ -223,7 +223,7 @@ module.exports = {
 
 
     },
-    
+
     /**
      * @api {get} /project List Projects
      * @apiName List  Projects
@@ -296,11 +296,11 @@ module.exports = {
         if (req.query.name) {
             criteria.name = req.query.name; // change this to starts with  or endswith
         }
- if (req.query.specialization) {
+        if (req.query.specialization) {
             criteria.specialization = req.query.specialization;
         }
 
-         if (req.query.email) {
+        if (req.query.email) {
             criteria.email = req.query.email;
         }
         if (req.query.telephone) {
@@ -317,9 +317,9 @@ module.exports = {
         }).spread(function(count, projects) {
 
             if (projects.length) {
-                projects.forEach(function(project){
-                project.description = project.description.toLowerCase();
-            })
+                projects.forEach(function(project) {
+                    project.description = project.description.toLowerCase();
+                })
                 var numberOfPages = Math.ceil(count / pagination.limit)
                 var nextPage = parseInt(pagination.page) + 1;
                 var meta = {
@@ -332,14 +332,14 @@ module.exports = {
                 }
                 return ResponseService.json(200, res, " Projects retrieved successfully", projects, meta);
             } else {
-                return ResponseService.json(200, res,"Projects not found", [])
+                return ResponseService.json(200, res, "Projects not found", [])
             }
         }).catch(function(err) {
             return ValidationService.jsonResolveError(err, res);
         });
     },
 
-  /**
+    /**
      * @api {get} /project/:id View Project
      * @apiName View  Project
      * @apiGroup Project
@@ -392,14 +392,31 @@ module.exports = {
                 if (!project) {
                     return ResponseService.json(404, res, "Project not found");
                 }
-                return ResponseService.json(200, res, "Project retrieved successfully", project);
+
+                var projectCost = parseFloat(project.cost);
+                criteria = {
+                    isDeleted: false,
+                    cost: {
+                        '<=': parseFloat(project.cost),
+                    }
+                }
+                relatedProjects = Project.find(criteria).where({ id: { '!': req.params.id } }).limit(10);
+                return [project, relatedProjects]
+            }).spread(function(project, relatedProjects) {
+                var projectPayload   = {
+                    project : project , 
+                    relatedProjects : relatedProjects
+                }
+                
+
+                return ResponseService.json(200, res, "Project retrieved successfully", projectPayload);
             })
             .catch(function(err) {
                 return ValidationService.jsonResolveError(err, res);
             });
     },
 
-    
+
     /**
      * @api {put} /related-project/:id Retrieve Related Project 
      * @apiName Retrieve Related Project
@@ -411,7 +428,7 @@ module.exports = {
      * @apiUse ProjectSuccessResponseData
      *
      * 
-    * @apiParam {Integer} if  project id
+     * @apiParam {Integer} if  project id
      *
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
@@ -434,25 +451,35 @@ module.exports = {
      * @apiError (Error 400) {Object} response variable holding response data
      * @apiError (Error 400) {String} response.message response message
      */
-    getRelatedProject: function(req , res) { 
+    getRelatedProject: function(req, res) {
         // get current project
         // using current project values 
         // get other project that fits into that same region system 
-        
-        Project.findOne(req.params.id).then( function(project) {
-            if(!project) {
-                return  ResponseService.json(200, res , "Project not Found");
+        // find project with cost less than current project
+        // ministry / state  ,cost less than , person 
+
+        Project.findOne(req.params.id).then(function(project) {
+            if (!project) {
+                return ResponseService.json(200, res, "Project not Found");
             }
-            relatedProjects = Project.find(criteria).limit(10);
-            return  [project, relatedProjects]
+            var projectCost = parseFloat(project.cost);
+            criteria = {
+                isDeleted: false,
+                cost: {
+                    '<=': parseFloat(project.cost),
+                }
+            }
+            relatedProjects = Project.find(criteria).where({ id: { '!': req.params.id } }).limit(10);
+            return [project, relatedProjects]
         }).spread(function(project, relatedProjects) {
-            if(!relatedProjects.length) { 
+            console.log(relatedProjects);
+            if (!relatedProjects.length) {
                 return ResponseService.json(200, res, "Related Project not found", []);
             }
 
-            return ResponseService.json(200, res , "Related Projects found", relatedProjects);
-        }).catch(function(err){
-            return ValidationService.jsonResolveError(err,res); 
+            return ResponseService.json(200, res, "Related Projects found", relatedProjects);
+        }).catch(function(err) {
+            return ValidationService.jsonResolveError(err, res);
         })
     },
     /**
@@ -466,7 +493,7 @@ module.exports = {
      * @apiUse ProjectSuccessResponseData
      *
      * 
-    * @apiParam {Integer} school  school id
+     * @apiParam {Integer} school  school id
      * @apiParam {String} faculty Faculty id
      * @apiParam {String} [discipline] Discipline id
      * @apiParam {String} name course name 

@@ -24,7 +24,7 @@ module.exports = {
         type:'json'
     },
     cost : {
-        type : 'string'
+        type : 'float'
     },
     districtId : {
         model : 'district'

@@ -17,6 +17,37 @@ module.exports.bootstrap = function(cb) {
     // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
     // 
     // 
+    
+
+    var  updateProjectCost = function(){
+        Project.find().then(function(projects) {
+            if(!projects.length) { 
+                return false;
+            }
+
+          var promiseArray = [];
+        for (var i = 0, len = projects.length; i < len; i++) {
+            if (!projects[i].id) {
+                continue;
+            }
+
+            projects[i].cost - parseFloat(projects[i].cost);
+            try {
+                promiseArray.push(Project.update({
+                    id: projects[i].id
+                }, projects[i]));
+            } catch (e) {
+                return ResponseService.json(500, res, "Internal Error: Please check inputs");
+            }
+        }
+        Promise.all(promiseArray).then(function(projects) {
+            return ResponseService.json(200, res, "Projects updated successfully", projects);
+        });
+        })
+    
+      
+
+    }
     var loadCountry = function(setup) {
         var countryData = {
             name: "Nigeria",
@@ -373,49 +404,24 @@ module.exports.bootstrap = function(cb) {
 
     }
     Setup.find().then(function(setup) {
-        // console.log(setup)
         if (setup.length) {
-            // console.log('setup  called')
+         //   updateProjectCost();
             if (setup[0].countryLoaded == false) {
                 loadCountry(setup);
             }
             if (setup[0].stateLoaded == false) {
-                // console.log('template is false')
                 loadStates(setup);
             }
             if (setup[0].lgaLoaded == false) {
-                // console.log('template is false')
                 loadLgas(setup);
             }
 
-            // if (setup[0].wardLoaded == false) {
-            //     // console.log('template is false')
-            //     loadWards(setup);
-            // }
             if (setup[0].districtLoaded == false) {
-                // console.log('template is false')
                 loadDistricts(setup);
             }
             if (setup[0].personLoaded == false) {
-                // console.log('template is false')
                 loadPersons(setup);
             }
-            //if (setup[0].consistuencyLoaded == false) {
-            //     // console.log('template is false')
-            //     loadConsistuencys(setup);
-            // }
-            // if (setup[0].stateConsistuencyLoaded == false) {
-            //     // console.log('template is false')
-            //     loadStateConsistuencys(setup);
-            // }
-            // if (setup[0].ministryLoaded == false) {
-            //     // console.log('template is false')
-            //     loadMinistrys(setup);
-            // }
-            // if (setup[0].mdaLoaded == false) {
-            //     // console.log('template is false')
-            //     loadMdas(setup);
-            // }
             if (setup[0].projectLoaded == false) {
                 // console.log('template is false')
                 loadProjects(setup);
@@ -425,11 +431,8 @@ module.exports.bootstrap = function(cb) {
                 loadCountry(newSetup);
                 loadStates(newSetup);
                 loadLgas(newSetup);
-                // loadWard(newSetup);
                 loadDistricts(newSetup);
                 loadPersons(newSetup);
-                // loadConsistuency(newSetup);
-                // loadStateConstituency(newSetup);
                 loadProjects(newSetup);
 
             });
