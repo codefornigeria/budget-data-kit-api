@@ -14,17 +14,115 @@ var kgSearchPromise = Promise.promisify(kgsearch.entities.search);
 
 module.exports = {
 
-    /*
-     * this  function does agregated search across specified categories returning the right set 
-     * of data  updates will include adding viewType to ensure that  display method can 
-     * handle the underlying dataset and use the correct view  display
+    /**
+     * @apiDefine SearchSuccessResponseData
+     * @apiSuccess {Object} response variable holding response data
+     * @apiSuccess {String} response.message response message
+     * @apiSuccess {Object} response.data variable holding actual data
+     */
+    
+    /**
+     * @apiDefine  SearchHeader
+     * @apiHeader {String} Authorization Basic authorization header token
+     */
+
+  /**
+     * @api {post} /search Search Person or Project
+     * @apiName Search Person or Project
+     * @apiGroup Search
+     * @apiVersion 0.0.1
+     *
+     *   @apiUse SearchHeader
+     * 
+     *
+     * @apiParam {String} name  doctor name
+     * @apiParam {String} address Doctor address
+     * @apiParam {String} [specialization] Doctor Specialization
+     * @apiParam {String} telephone Doctor Telephone Number
+     * @apiParam {String} email Doctor Email Address
+     * @apiParam {String} picture Doctor avatar
+     *
+     * @apiUse SearchSuccessResponseData
+     *
+     * @apiSuccessExample Success-Response
+     * HTTP/1.1 200 OK
+     * {
+     *     "response": {
+     *     "message": "Course created successfully",
+     *     "data": {
+     *         "school": "56ac782720d141560b2bf08f",
+     *         "faculty": "56ac8a42aad4b35e0e091e13",
+     *         "name": "Quantum Physics",
+     *         "coursecode": "PHY301",
+     *         "description": "Quantum Physics",
+     *         "discipline": "56ac9df6d984e2aa11863212",
+     *         "unit": 4,
+     *         "active": true,
+     *         "isDeleted": false,
+     *         "createdAt": "2016-01-30T11:18:30.284Z",
+     *         "updatedAt": "2016-01-30T11:18:30.284Z",
+     *         "id": "56ac9c0677783639110e5470
+     *         }
+     *      }
+     *   }
+     *
+     *
+     * @apiErrorExample Error-Response
+     * HTTP/1.1 400 Bad Request
+     * {
+     * "response": {
+     * "message": "Validation error has occured",
+     * "errors": {
+     * "school": [
+     * {
+     *     "rule": "required",
+     *     "message": "School is required"
+     *  }
+     *  ],
+     *  "faculty": [
+     *   {
+     *      "rule": "required",
+     *      "message": "Faculty is required"
+     *      }
+     *    ],
+     *  "name": [
+     *  {
+     *    "rule": "string",
+     *    "message": "`undefined` should be a string (instead of \"null\", which is a object)"
+     *    },
+     *    {
+     *    "rule": "required",
+     *    "message": "Name is required"
+     *    }
+     *    ],
+     *    "unit": [
+     *    {
+     *    "rule": "integer",
+     *    "message": "`undefined` should be a integer (instead of \"null\", which is a object)"
+     *    },
+     *    {
+     *    "rule": "required",
+     *    "message": "Unit is required"
+     *    }
+     *    ]
+     *    }
+     *    }
+     *    }
+     * @apiErrorExample Error-Response
+     * HTTP/1.1 400 Bad Request
+     * {
+     * "response": {
+     * "message": "Cannot Create Existing Course",
+     *    }
+     *    }
+     *    
+     *
+     * @apiError (Error 400) {Object} response variable holding response data
+     * @apiError (Error 400) {String} response.message response message
      */
     search: function(req, res) {
         var query = req.query.query
-            // change to waterfall 
-            // find person then project then persons
-
-        async.waterfall(
+            async.waterfall(
             [
                 function(callback) {
                     var searchResult = {}
