@@ -69,6 +69,10 @@ module.exports.routes = {
    'GET /home-search':{
     controller : 'SearchController',
     action:'homeSearch'
+  }, 
+  'GET /related-project/:id':{
+    controller : 'ProjectController',
+    action : 'getRelatedProject'
   }
 
 };
