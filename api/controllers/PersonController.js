@@ -321,14 +321,14 @@ module.exports = {
                         project.ministry =  project.ministry.toLowerCase();
                         project.district.name  = project.district.name.toLowerCase();
                     })
-                    if(personEntity.itemListElement){
 
-                    person.graphData =  personEntity.itemListElement[0].result
-                    console.log(person.graphData);
-                        
-                }else {
-                    person.graphData = null;
-                }
+                    try { 
+                        person.graphData =  personEntity.itemListElement[0].result
+            
+                    }catch(e) {
+                          person.graphData = null;
+                    }
+        
                 return ResponseService.json(200, res, "Person retrieved successfully", person);
          
             })
