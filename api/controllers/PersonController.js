@@ -229,7 +229,7 @@ module.exports = {
         }
 
         Person.count(criteria).then(function(count) {
-            var findQuery = Person.find(criteria) .limit(1)
+            var findQuery = Person.find(criteria)
                .populateAll()
                 .sort('createdAt DESC')
                 .paginate(pagination);
