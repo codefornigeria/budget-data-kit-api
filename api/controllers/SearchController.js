@@ -378,12 +378,12 @@ module.exports = {
             return ResponseService.json(400, res, "Category not Set");
         }
 
-        Project.findOne(project).then(function(project) {
+        Project.findOne(payload.project).then(function(project) {
 
             if(!project) {
                 return ResponseService.json(404 , res, "Project Not Found" ) ;
             }
-            personLink  = person.findOne(person);
+            personLink  = person.findOne(payload.person);
             return [project, person];
         }).spread(function(project, person) {
             if(!person) {
