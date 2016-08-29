@@ -234,6 +234,7 @@ module.exports = {
             return [count, findQuery]
 
         }).spread(function(count, persons) {
+
             if (persons.length) {
                 var numberOfPages = Math.ceil(count / pagination.limit)
                 var nextPage = parseInt(pagination.page) + 1;
@@ -309,6 +310,7 @@ module.exports = {
                 if (!person) {
                     return ResponseService.json(404, res, "Person not found");
                 }
+                person.district.name = person.district.name.toLowerCase();
                 personKgEntity = kgSearchPromise({key:KG_API_KEY, query: person.name});
 
                 return [person , personKgEntity];
