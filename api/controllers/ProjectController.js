@@ -435,8 +435,9 @@ module.exports = {
      * 
      * @apiUse ProjectSuccessResponseData
      *
-     * 
-     * @apiParam {Integer} if  project id
+     *
+     * @apiParam {String} id  project id
+     * @apiParam {String} category  project category
      *
      * @apiSuccessExample Success-Response
      * HTTP/1.1 200 OK
@@ -474,8 +475,12 @@ module.exports = {
             criteria = {
                 isDeleted: false,
                 cost: {
-                    '<=': parseFloat(project.cost),
-                }
+                    '<=': parseFloat(project.cost)
+                } 
+             
+            }
+            if(req.query.category) {
+                criteria.category = req.query.category;
             }
             relatedProjects = Project.find(criteria).where({ id: { '!': req.params.id } }).limit(10);
             return [project, relatedProjects]
