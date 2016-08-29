@@ -405,7 +405,7 @@ module.exports.bootstrap = function(cb) {
     }
     Setup.find().then(function(setup) {
         if (setup.length) {
-            updateProjectCost();
+        //    updateProjectCost();
             if (setup[0].countryLoaded == false) {
                 loadCountry(setup);
             }

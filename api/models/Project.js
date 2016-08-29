@@ -72,7 +72,7 @@ module.exports = {
         type : 'string'
 
     },
-    category { 
+    category :{ 
         type : 'string'
     },
     startDate : {
