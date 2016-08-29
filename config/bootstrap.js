@@ -31,7 +31,8 @@ module.exports.bootstrap = function(cb) {
                 continue;
             }
 
-            projects[i].cost - parseFloat(projects[i].cost);
+            projects[i].cost = parseFloat(projects[i].cost);
+            projects[i].matched = false;
             try {
                 promiseArray.push(Project.update({
                     id: projects[i].id
@@ -405,7 +406,7 @@ module.exports.bootstrap = function(cb) {
     }
     Setup.find().then(function(setup) {
         if (setup.length) {
-        //    updateProjectCost();
+            updateProjectCost();
             if (setup[0].countryLoaded == false) {
                 loadCountry(setup);
             }

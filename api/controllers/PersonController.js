@@ -212,7 +212,9 @@ module.exports = {
             criteria.specialization = req.query.specialization;
         }
 
-
+         if (req.query.state) {
+            criteria.stateId = req.query.state;
+            }
         if (req.query.email) {
             criteria.email = req.query.email;
         }
