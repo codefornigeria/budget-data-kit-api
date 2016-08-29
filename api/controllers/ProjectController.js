@@ -403,6 +403,9 @@ module.exports = {
                 relatedProjects = Project.find(criteria).where({ id: { '!': req.params.id } }).limit(10);
                 return [project, relatedProjects]
             }).spread(function(project, relatedProjects) {
+                 relatedProjects.forEach(function(project) {
+                    project.description = project.description.toLowerCase();
+                })
                 var projectPayload   = {
                     project : project , 
                     relatedProjects : relatedProjects
