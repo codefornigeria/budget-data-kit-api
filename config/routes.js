@@ -70,6 +70,10 @@ module.exports.routes = {
     controller : 'SearchController',
     action:'homeSearch'
   }, 
+   'POST /match-project':{
+    controller : 'SearchController',
+    action:'matchProject'
+  }, 
   'GET /related-project/:id':{
     controller : 'ProjectController',
     action : 'getRelatedProject'

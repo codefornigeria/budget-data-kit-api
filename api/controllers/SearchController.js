@@ -363,6 +363,57 @@ module.exports = {
 
     },
 
+    matchProject: function(req,res) {
+        var payload = request.body; 
+
+        if(!payload.project) {
+            return  ResponseService.json(400, res, "Project not set");
+
+        }
+
+        if(!payload.person) {
+            return ResponseService.json(400, res, "Person not Set");
+        }  
+        if(!payload.category) {
+            return ResponseService.json(400, res, "Category not Set");
+        }
+
+        Project.findOne(project).then(function(project) {
+
+            if(!project) {
+                return ResponseService.json(404 , res, "Project Not Found" ) ;
+            }
+            personLink  = person.findOne(person);
+            return [project, person];
+        }).spread(function(project, person) {
+            if(!person) {
+                return ResponseService.json(404 , res, "Person not Found");
+            }
+            data = {
+               personId : person.id,
+               district : person.district,
+               districtId : person.districtId,
+               state : person.state,
+               stateId : person.stateId,
+               category  : payload.category ,
+               matched : true
+            }
+            var projectUpdate = Project.Update({ id: project.id,
+                isDeleted: false}, data); 
+
+            return projectUpdate;
+         
+        }).then(function(updated) {
+
+            if (!updated.length) {
+                    return ResponseService.json(404, res, "Project not found");
+                }
+                return ResponseService.json(200, res, "Project updated successfully", updated[0]);
+            })
+            .catch(function(err) {
+                return ValidationService.jsonResolveError(err, res);
+            });
+    },     
     homeSearch : function(req,res) {
         /*
          * this function handles search on the front page
