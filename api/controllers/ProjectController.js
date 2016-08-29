@@ -405,6 +405,8 @@ module.exports = {
             }).spread(function(project, relatedProjects) {
                  relatedProjects.forEach(function(project) {
                     project.description = project.description.toLowerCase();
+                    project.ministry = project.ministry.toLowerCase();
+                    project.district.name = project.district.name.toLowerCase();
                 })
                 var projectPayload   = {
                     project : project , 
