@@ -72,11 +72,18 @@ module.exports = {
         type : 'string'
 
     },
+    category { 
+        type : 'string'
+    },
     startDate : {
         type : 'date'
     },
     endDate : {
         type : 'date'
+    },
+    matched: {
+        type : 'boolean', 
+        defaultsTo : false
     },
       isDeleted: {
             type : 'boolean',
