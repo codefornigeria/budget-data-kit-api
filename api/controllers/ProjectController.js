@@ -307,7 +307,7 @@ module.exports = {
             criteria.telephone = req.query.telephone;
         }
         if(req.query.matched) {
-            return criteria.mate  = req.query.matched;
+             criteria.matched  = req.query.matched;
         }
 
 
