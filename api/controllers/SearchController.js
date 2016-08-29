@@ -364,7 +364,7 @@ module.exports = {
     },
 
     matchProject: function(req,res) {
-        var payload = request.body; 
+        var payload = req.body; 
 
         if(!payload.project) {
             return  ResponseService.json(400, res, "Project not set");
