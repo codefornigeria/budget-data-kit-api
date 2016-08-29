@@ -384,7 +384,7 @@ module.exports = {
                 return ResponseService.json(404 , res, "Project Not Found" ) ;
             }
             personLink  = person.findOne(payload.person);
-            return [project, person];
+            return [project, personLink];
         }).spread(function(project, person) {
             if(!person) {
                 return ResponseService.json(404 , res, "Person not Found");
