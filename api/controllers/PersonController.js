@@ -212,7 +212,9 @@ module.exports = {
             criteria.specialization = req.query.specialization;
         }
 
-
+         if (req.query.state) {
+            criteria.stateId = req.query.state;
+            }
         if (req.query.email) {
             criteria.email = req.query.email;
         }
@@ -227,7 +229,7 @@ module.exports = {
         }
 
         Person.count(criteria).then(function(count) {
-            var findQuery = Person.find(criteria) .limit(1)
+            var findQuery = Person.find(criteria)
                .populateAll()
                 .sort('createdAt DESC')
                 .paginate(pagination);

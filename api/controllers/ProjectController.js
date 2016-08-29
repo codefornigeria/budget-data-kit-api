@@ -306,6 +306,9 @@ module.exports = {
         if (req.query.telephone) {
             criteria.telephone = req.query.telephone;
         }
+        if(req.query.matched) {
+            return criteria.mate  = req.query.matched;
+        }
 
 
         Project.count(criteria).then(function(count) {

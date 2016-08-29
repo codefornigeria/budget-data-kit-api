@@ -31,7 +31,8 @@ module.exports.bootstrap = function(cb) {
                 continue;
             }
 
-            projects[i].cost - parseFloat(projects[i].cost);
+            projects[i].cost = parseFloat(projects[i].cost);
+            projects[i].matched = false;
             try {
                 promiseArray.push(Project.update({
                     id: projects[i].id
