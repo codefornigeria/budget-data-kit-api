@@ -365,7 +365,7 @@ module.exports = {
 
     matchProject: function(req,res) {
         var payload = req.body; 
-
+        console.log(payload);
         if(!payload.project) {
             return  ResponseService.json(400, res, "Project not set");
 
@@ -383,7 +383,7 @@ module.exports = {
             if(!project) {
                 return ResponseService.json(404 , res, "Project Not Found" ) ;
             }
-            personLink  = person.findOne(payload.person);
+            personLink  = Person.findOne(payload.person);
             return [project, personLink];
         }).spread(function(project, person) {
             if(!person) {
@@ -398,7 +398,7 @@ module.exports = {
                category  : payload.category ,
                matched : true
             }
-            var projectUpdate = Project.Update({ id: project.id,
+            var projectUpdate = Project.update({ id: project.id,
                 isDeleted: false}, data); 
 
             return projectUpdate;
