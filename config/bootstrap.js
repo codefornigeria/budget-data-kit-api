@@ -20,12 +20,13 @@ module.exports.bootstrap = function(cb) {
     
 
     var  updateProjectCost = function(){
+          var promiseArray = [];
+
         Project.find().then(function(projects) {
             if(!projects.length) { 
                 return false;
             }
 
-          var promiseArray = [];
         for (var i = 0, len = projects.length; i < len; i++) {
             if (!projects[i].id) {
                 continue;
@@ -44,6 +45,8 @@ module.exports.bootstrap = function(cb) {
         Promise.all(promiseArray).then(function(projects) {
             return ResponseService.json(200, res, "Projects updated successfully", projects);
         });
+        }).catch(function(err){
+            return ValidationService.jsonResolveError(err,res);
         })
     
       
@@ -406,7 +409,7 @@ module.exports.bootstrap = function(cb) {
     }
     Setup.find().then(function(setup) {
         if (setup.length) {
-        //    updateProjectCost();
+            updateProjectCost();
             if (setup[0].countryLoaded == false) {
                 loadCountry(setup);
             }
