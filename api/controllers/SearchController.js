@@ -395,7 +395,7 @@ module.exports = {
                districtId : person.districtId,
                state : person.state,
                stateId : person.stateId,
-               category  : payload.category ,
+               category  : payload.category.toLowerCase() ,
                matched : true
             }
             var projectUpdate = Project.update({ id: project.id,
