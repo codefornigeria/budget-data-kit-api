@@ -48,6 +48,10 @@ module.exports = {
             type :'boolean',
             defaultsTo: false
         },
+         repLoaded :{
+            type :'boolean',
+            defaultsTo: false
+        },
         projectLoaded: {
             type: 'boolean',
             defaultsTo: false

@@ -20,7 +20,7 @@ module.exports = {
      * @apiSuccess {String} response.message response message
      * @apiSuccess {Object} response.data variable holding actual data
      */
-    
+
     /**
      * @apiDefine  SearchHeader
      * @apiHeader {String} Authorization Basic authorization header token
@@ -33,7 +33,7 @@ module.exports = {
      * @apiVersion 0.0.1
      *
      *   @apiUse SearchHeader
-     * 
+     *
      *
      * @apiParam {String} name  doctor name
      * @apiParam {String} address Doctor address
@@ -115,7 +115,7 @@ module.exports = {
      * "message": "Cannot Create Existing Course",
      *    }
      *    }
-     *    
+     *
      *
      * @apiError (Error 400) {Object} response variable holding response data
      * @apiError (Error 400) {String} response.message response message
@@ -177,7 +177,7 @@ module.exports = {
                             callback(null, searchResult)
 
                         })
-                       
+
                     }, 100)
                 },
 
@@ -238,35 +238,7 @@ module.exports = {
                 })
                 return ResponseService.json(200, res, " Search Results Retrieved Successfully", uniqResult);
             })
-            // async.parallel({
-            //     person: function(callback) {
-            //         setTimeout(function() {
-            //             sails.controllers.search.searchPerson(query, function(err, result) {
-            //                 if (err) {
-            //                     callback(err);
-            //                 }
-            //                 callback(null, result)
 
-        //             })
-        //         }, 100)
-        //     },
-        //     project: function(callback) {
-        //         setTimeout(function() {
-        //             sails.controllers.search.searchProject(query, function(err, result) {
-        //                 if (err) {
-        //                     callback(err);
-        //                 }
-        //                 callback(null, result)
-
-        //             })
-        //         }, 100)
-        //     }
-        // }, function(err, results) {
-        //     if (err) {
-        //         return ResponseService.json(400, res, "Error Retrieving search results")
-        //     }
-        //     return ResponseService.json(200, res, " Search Results Retrieved Successfully", results);
-        // })
 
     },
 
@@ -364,8 +336,8 @@ module.exports = {
     },
 
     matchProject: function(req,res) {
-        var payload = req.body; 
-     
+        var payload = req.body;
+
         if(!payload.project) {
             return  ResponseService.json(400, res, "Project not set");
 
@@ -373,7 +345,7 @@ module.exports = {
 
         if(!payload.person) {
             return ResponseService.json(400, res, "Person not Set");
-        }  
+        }
         if(!payload.category) {
             return ResponseService.json(400, res, "Category not Set");
         }
@@ -399,10 +371,10 @@ module.exports = {
                matched : true
             }
             var projectUpdate = Project.update({ id: project.id,
-                isDeleted: false}, data); 
+                isDeleted: false}, data);
 
             return projectUpdate;
-         
+
         }).then(function(updated) {
 
             if (!updated.length) {
@@ -413,7 +385,7 @@ module.exports = {
             .catch(function(err) {
                 return ValidationService.jsonResolveError(err, res);
             });
-    },     
+    },
     homeSearch : function(req,res) {
         /*
          * this function handles search on the front page
@@ -472,11 +444,11 @@ module.exports = {
 
                     return ResponseService.json(400, res, "Error Retrieving search results")
                 }
-                
+
                 return ResponseService.json(200, res, " Search Results Retrieved Successfully", result);
 
         })
-        
+
     }
 
 

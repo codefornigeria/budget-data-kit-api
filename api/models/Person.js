@@ -23,6 +23,9 @@ var slug = require('slug');
         phone: {
             type: 'string'
         },
+         party: {
+            type: 'string'
+        },
         stateId: {
             model: 'state'
         },
